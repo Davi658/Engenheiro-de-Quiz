@@ -81,3 +81,4 @@ Running 20 tests using 2 workers
   - Ambos atendem ao padrão WCAG AA para texto normal (mínimo 4.5:1) e texto grande (mínimo 3:1).
 - **Responsividade**: Testado e aprovado com viewport de largura 360px sem qualquer transbordo ou barra de rolagem horizontal no fluxo principal.
 - **Sem Dependências Externas**: Nenhuma chamada de CDN, fontes do Google ou bibliotecas de telemetria foram incluídas.
+

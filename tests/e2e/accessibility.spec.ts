@@ -14,28 +14,28 @@ const noHorizontalOverflow = (page: Page) =>
 
 test('fluxo completo do piloto somente por teclado', async ({ page }) => {
   await page.goto(PILOT);
-  await tabTo(page, page.getByLabel('Seu nome'));
+  await tabTo(page, page.getByLabel('Seu nome ou do seu espaço'));
   await page.keyboard.type('Pessoa Teste');
   await page.keyboard.press('Tab');
-  await expect(page.getByLabel('Seu email')).toBeFocused();
+  await expect(page.getByLabel('Seu email de contato')).toBeFocused();
   await page.keyboard.type('teste@example.com');
   await page.keyboard.press('Enter');
 
-  for (let i = 1; i <= 5; i++) {
-    await expect(page.getByText(`Página ${i} de 5`)).toBeVisible();
+  for (let i = 1; i <= 6; i++) {
+    await expect(page.getByText(`Página ${i} de 6`)).toBeVisible();
     await expect(page.locator('#titulo-etapa')).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(page.locator('input[type="radio"]').first()).toBeFocused();
     await page.keyboard.press('Space');
     await expect(page.locator('input[type="radio"]').first()).toBeChecked();
-    await tabTo(page, page.getByRole('button', { name: i === 5 ? 'Ver prévia' : 'Continuar' }));
+    await tabTo(page, page.getByRole('button', { name: i === 6 ? 'Ver prévia' : 'Continuar' }));
     await page.keyboard.press('Enter');
   }
-  await expect(page.getByRole('heading', { name: 'Sua prévia' })).toBeFocused();
-  await expect(page.getByTestId('minimo')).toHaveText('R$ 33,69');
+  await expect(page.getByRole('heading', { name: 'Sua prévia de atendimento' })).toBeFocused();
+  await expect(page.getByTestId('minimo')).toHaveText('R$ 34,22');
   await tabTo(page, page.getByRole('button', { name: 'Ver relatório de demonstração' }));
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('heading', { name: 'Relatório de demonstração' })).toBeFocused();
+  await expect(page.getByRole('heading', { name: 'Relatório Técnico e Comercial' })).toBeFocused();
 });
 
 test('erro de página foca a primeira pergunta inválida e é associado a ela', async ({ page }) => {
@@ -58,7 +58,14 @@ test.describe('360 px', () => {
     await noHorizontalOverflow(page);
     await identify(page);
     await noHorizontalOverflow(page);
-    await completePilot(page, ['Alongamento', 'Nail art elaborada', 'Precisa remover o produto anterior', 'Visual marcante', 'Até 60 minutos']);
+    await completePilot(page, [
+      'Alongamento completo (fibra de vidro ou gel moldado)',
+      'Nail art elaborada (encapsulada, pedrarias ou desenho à mão livre)',
+      'Necessita remoção química/mecânica de gel ou acrílico anterior',
+      'Exclusividade e impacto visual diferenciado',
+      'Até 60 minutos (1 hora)',
+      'Até R$ 35,00'
+    ]);
     await noHorizontalOverflow(page);
     await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
     await noHorizontalOverflow(page);

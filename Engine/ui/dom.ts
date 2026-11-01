@@ -17,6 +17,10 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Attrs = 
   return el;
 }
 
-/** Fake-data seal shown on every result screen and quiz page. */
-export const seal = () => h('p', { class: 'seal', role: 'note' }, 'Simulação com valores fictícios');
+/** Badge or methodology disclaimer based on demo mode. */
+export const seal = (demo: boolean = true) =>
+  demo
+    ? h('p', { class: 'seal', role: 'note' }, 'Simulação com valores fictícios')
+    : h('p', { class: 'methodology-badge', role: 'note' }, '✓ Metodologia técnica baseada em custos reais de insumos e tempo de mesa');
+
 

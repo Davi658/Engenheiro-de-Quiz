@@ -22,10 +22,16 @@ export function renderReport(s: Session, handlers: ReportHandlers) {
   const rate = (hourly: string) => `${duration(result.minutes)} × ${money(hourly)}/h`;
   const sameAsChoice = (overrides: Record<string, string>) => Object.entries(overrides).every(([k, v]) => s.answers[k] === v);
   return h('section', { class: 'card report' },
-    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Relatório de demonstração'),
-    seal(),
-    h('p', { class: 'notice', role: 'note' }, 'Exemplo de demonstração: não é uma compra, não solicita pagamento e nada será enviado por email.'),
+    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Relatório Técnico e Comercial'),
+    seal(s.snapshot.demo),
+    h('p', { class: 'notice', role: 'note' }, s.snapshot.demo
+      ? 'Exemplo de demonstração: não é uma compra, não solicita pagamento e nada será enviado por email.'
+      : 'Detalhamento completo da formação do seu preço, custos por atendimento e projeção de margens.'),
     profileCard(result),
+    result.actualPriceDiagnosis && h('div', { class: 'report-actual-price' },
+      h('h3', {}, 'Análise do seu Preço Informado'),
+      h('p', {}, `Atualmente você indicou cobrar ${money(result.actualPriceDiagnosis.actualPrice)}. `),
+      h('p', { class: result.actualPriceDiagnosis.status === 'loss' ? 'warning' : 'ok' }, result.actualPriceDiagnosis.message)),
     h('h3', {}, 'Custos do atendimento simulado'),
     h('table', { class: 'costs' },
       h('tbody', {},

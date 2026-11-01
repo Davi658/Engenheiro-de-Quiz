@@ -17,29 +17,61 @@ export function profileCard(result: Result) {
 export function assumptions(s: Session) {
   const r = s.snapshot.result;
   if (r.kind !== 'pricing-v1') return null;
+  if (s.snapshot.demo) {
+    return h('p', { class: 'assumptions' },
+      `Premissas fictícias: despesas operacionais de ${money(r.scenario.operatingHourly)} por hora, remuneração de ${money(r.scenario.compensationHourly)} por hora e taxa de ${percent(r.scenario.feeRate)} sobre o preço. `,
+      'Estes valores servem apenas para demonstrar o cálculo e não indicam seu lucro ou prejuízo real.');
+  }
   return h('p', { class: 'assumptions' },
-    `Premissas fictícias: despesas operacionais de ${money(r.scenario.operatingHourly)} por hora, remuneração de ${money(r.scenario.compensationHourly)} por hora e taxa de ${percent(r.scenario.feeRate)} sobre o preço. `,
-    'Estes valores servem apenas para demonstrar o cálculo e não indicam seu lucro ou prejuízo real.');
+    `Metodologia de precificação: despesas operacionais fixadas em ${money(r.scenario.operatingHourly)} por hora de mesa, remuneração profissional pretendida de ${money(r.scenario.compensationHourly)} por hora e reserva de ${percent(r.scenario.feeRate)} para taxas/impostos. `,
+    'Os custos de insumos variam conforme a técnica e arte selecionadas.');
+}
+
+export function actualPriceDiagnosisCard(diag: NonNullable<import('../core/pricing').ActualPriceDiagnosis>) {
+  const statusClasses: Record<typeof diag.status, string> = {
+    loss: 'diagnosis-card loss',
+    sub_target: 'diagnosis-card sub-target',
+    healthy: 'diagnosis-card healthy',
+  };
+  const statusLabels: Record<typeof diag.status, string> = {
+    loss: 'Prejuízo Operacional',
+    sub_target: 'Abaixo da Remuneração Ideal',
+    healthy: 'Margem Saudável e Sustentável',
+  };
+
+  return h('div', { class: statusClasses[diag.status], 'data-testid': 'diagnostico-preco' },
+    h('p', { class: 'eyebrow' }, 'Diagnóstico do seu preço atual'),
+    h('p', { class: 'diagnosis-status' }, statusLabels[diag.status]),
+    h('p', { class: 'diagnosis-message' }, diag.message),
+    h('dl', { class: 'diagnosis-facts' },
+      h('div', {}, h('dt', {}, 'Seu preço informado'), h('dd', {}, money(diag.actualPrice))),
+      h('div', {}, h('dt', {}, 'Margem líquida real'), h('dd', {}, percent(diag.effectiveMargin))),
+      h('div', {}, h('dt', {}, 'Resultado líquido por atendimento'), h('dd', {}, money(diag.profit)))));
 }
 
 export function renderPreview(s: Session, result: Result, handlers: PreviewHandlers) {
   const body: (Node | null)[] = [profileCard(result)];
   if (result.kind === 'pricing-v1') {
+    if (result.actualPriceDiagnosis) {
+      body.push(actualPriceDiagnosisCard(result.actualPriceDiagnosis));
+    }
     body.push(
       h('p', { class: 'explanation' }, result.explanation),
       h('dl', { class: 'facts' },
-        h('div', {}, h('dt', {}, 'Duração estimada'), h('dd', { 'data-testid': 'duracao' }, duration(result.minutes))),
-        h('div', {}, h('dt', {}, 'Tempo disponível'), h('dd', {}, duration(result.available))),
-        h('div', {}, h('dt', {}, 'Preço mínimo do cenário'), h('dd', { 'data-testid': 'minimo' }, money(result.minimum)))),
+        h('div', {}, h('dt', {}, 'Duração estimada de mesa'), h('dd', { 'data-testid': 'duracao' }, duration(result.minutes))),
+        h('div', {}, h('dt', {}, 'Tempo de mesa planejado'), h('dd', {}, duration(result.available))),
+        h('div', {}, h('dt', {}, 'Preço mínimo sustentável'), h('dd', { 'data-testid': 'minimo' }, money(result.minimum)))),
       result.compatible
         ? h('p', { class: 'ok' }, 'Compatível: a duração estimada cabe no tempo disponível.')
         : h('p', { class: 'warning', role: 'status' }, `Atenção: a duração estimada (${result.minutes} minutos) supera o tempo disponível (${result.available} minutos). O tempo não foi reduzido; considere outro acabamento ou mais tempo.`),
-      h('p', { class: 'alert' }, `Neste exemplo fictício, cobrar menos de ${money(result.minimum)} não cobre os custos e a remuneração considerados.`),
+      h('p', { class: 'alert' }, s.snapshot.demo
+        ? `Neste exemplo fictício, cobrar menos de ${money(result.minimum)} não cobre os custos e a remuneração considerados.`
+        : `Cobrar menos de ${money(result.minimum)} por esse procedimento não cobrirá o custo dos seus insumos e o valor da sua hora trabalhada.`),
       assumptions(s));
   }
   return h('section', { class: 'card' },
-    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Sua prévia'),
-    seal(),
+    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Sua prévia de atendimento'),
+    seal(s.snapshot.demo),
     body,
     versionNote(s),
     h('div', { class: 'actions' },

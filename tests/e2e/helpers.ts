@@ -2,7 +2,14 @@ import { expect, type Page } from '@playwright/test';
 
 export const PILOT = '/?quiz=beleza-unhas';
 export const SECOND = '/?quiz=preferencia-atendimento';
-export const reference = ['Manicure tradicional', 'Discreto e uniforme', 'Pronta para iniciar', 'Praticidade no dia a dia', 'Até 60 minutos'];
+export const reference = [
+  'Manicure tradicional (cutilagem e esmaltação comum)',
+  'Discreto e uniforme (cor única ou francesinha clássica)',
+  'Unha limpa, pronta para o procedimento',
+  'Agilidade e durabilidade para a rotina',
+  'Até 60 minutos (1 hora)',
+  'R$ 50,00'
+];
 
 export async function identify(page: Page, name = 'Pessoa Teste', email: string | null = 'teste@example.com') {
   await page.getByLabel('Seu nome').fill(name);

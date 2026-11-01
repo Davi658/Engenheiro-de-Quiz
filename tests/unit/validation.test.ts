@@ -25,12 +25,18 @@ describe('regras numéricas do piloto', () => {
   ['taxa + margem >= 1', (q: any) => q.result.scenario.targetMargins[2] = '0.95'],
   ['taxa >= 1', (q: any) => q.result.scenario.feeRate = '1'],
   ['custo/hora negativo', (q: any) => q.result.scenario.operatingHourly = '-1.00'],
-  ['minutos fracionários', (q: any) => q.pages[0].blocks[0].options[0].values.minutes = '40.5'],
-  ['métrica ausente', (q: any) => delete q.pages[0].blocks[0].options[0].values.materials],
-  ['dinheiro com três casas', (q: any) => q.pages[0].blocks[0].options[0].values.materials = '8.001'],
+  ['minutos fracionários', (q: any) => q.pages[0].blocks[1].options[0].values.minutes = '40.5'],
+  ['métrica ausente', (q: any) => delete q.pages[0].blocks[1].options[0].values.materials],
+  ['dinheiro com três casas', (q: any) => q.pages[0].blocks[1].options[0].values.materials = '8.001'],
   ['perfil sem cobertura', (q: any) => delete q.result.profiles.simples],
   ['pacote com alternativa inexistente', (q: any) => q.result.packages[0].overrides.acabamento = 'nenhum'],
   ['disponibilidade zero', (q: any) => q.pages[4].blocks[0].options[0].values.minutes = '0'],
+  ['actualPriceQuestion sem actualPriceKey', (q: any) => { q.result.actualPriceQuestion = 'servico'; delete q.result.actualPriceKey; }],
+  ['actualPriceKey com valor não positivo', (q: any) => {
+    q.result.actualPriceQuestion = 'servico';
+    q.result.actualPriceKey = 'price';
+    q.pages[0].blocks[1].options[0].values = { minutes: '40', materials: '8', price: '-10' };
+  }],
  ])('rejeita %s com caminho útil', (_, mutate) => {
   const q = pilot(); mutate(q); const r = validateQuiz(q);
   expect(r.success).toBe(false); if (!r.success) expect(r.errors[0].path).not.toBe('');

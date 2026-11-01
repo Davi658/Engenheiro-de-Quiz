@@ -40,6 +40,16 @@ export function validateQuiz(input:unknown): {success:true;data:Quiz}|{success:f
   r.scenario.targetMargins.forEach((m,i)=>{if(new Decimal(m).gte(1)||fee.plus(m).gte(1))error(`result.scenario.targetMargins.${i}`,'Taxa + margem deve ser menor que 1.');});
   if(!r.scenario.targetMargins.some(m=>new Decimal(m).isZero()))error('result.scenario.targetMargins','Incluir margem zero para preço mínimo.');
   unique(r.scenario.targetMargins.map(m=>new Decimal(m).toString()),'result.scenario.targetMargins');
+  if(r.actualPriceQuestion) {
+   if(!r.actualPriceKey) error('result.actualPriceKey','Chave da métrica de preço praticado obrigatória.');
+   else {
+    const apRef = ref(r.actualPriceQuestion);
+    for(const o of apRef?.options??[]) {
+     const v = o.values?.[r.actualPriceKey];
+     if(!v || !/^\d+(\.\d{1,2})?$/.test(v) || new Decimal(v).lte(0)) error(`questions.${r.actualPriceQuestion}.${o.id}.${r.actualPriceKey}`,'Preço praticado deve ser valor decimal positivo.');
+    }
+   }
+  }
   r.packages.forEach((p,i)=>{if(!Object.keys(p.overrides).length)error(`result.packages.${i}`,'Substituição obrigatória.');for(const [k,v] of Object.entries(p.overrides)){const x=ref(k);if(x&&!x.options.some(o=>o.id===v))error(`result.packages.${i}.${k}`,'Alternativa inexistente.');}});
  }
  return errors.length?{success:false,errors}:{success:true,data:q};

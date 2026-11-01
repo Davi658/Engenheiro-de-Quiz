@@ -10,13 +10,14 @@ const pricing = z.strictObject({
  kind:z.literal('pricing-v1'), contributionQuestions:z.array(id).min(1), durationKey:id, materialsKey:id,
  availabilityQuestion:id, availabilityKey:id, profileQuestion:id, profiles:z.record(id,profile),
  priorityQuestion:id, priorityTexts:z.record(id,text),
+ actualPriceQuestion:id.optional(), actualPriceKey:id.optional(),
  scenario:z.strictObject({currency:z.literal('BRL'),operatingHourly:money,compensationHourly:money,feeRate:decimal,targetMargins:z.array(decimal).length(3)}),
  packages:z.array(z.strictObject({id,label:text,overrides:z.record(id,id)})).length(2)
 });
 const category = z.strictObject({kind:z.literal('category-table-v1'),questionIds:z.array(id).min(1),rows:z.array(z.strictObject({answers:z.record(id,id),label:text,description:text})).min(1)});
 export const quizSchema = z.strictObject({
  schemaVersion:z.literal(1), id, version:z.string().regex(/^\d+\.\d+\.\d+$/), title:text,
- locale:z.literal('pt-BR'),demo:z.literal(true),theme:z.enum(['rose','teal']),
+ locale:z.literal('pt-BR'),demo:z.boolean(),theme:z.enum(['rose','teal']),
  identification:z.array(z.strictObject({id,type:z.enum(['text','email']),label:text,required:z.boolean()})),
  pages:z.array(z.strictObject({id,title:text,blocks:z.array(z.discriminatedUnion('type',[z.strictObject({type:z.literal('text'),text}),questionSchema])).min(1)})).min(1),
  result:z.discriminatedUnion('kind',[pricing,category])

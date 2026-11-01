@@ -83,7 +83,7 @@ export function renderPage(s: Session, handlers: FormHandlers) {
     h('p', { class: 'progress' }, `Página ${s.pageIndex + 1} de ${q.pages.length}`),
     h('progress', { max: q.pages.length, value: s.pageIndex + 1, 'aria-hidden': 'true' }),
     h('h2', { id: 'titulo-etapa', tabindex: -1 }, page.title),
-    seal(),
+    seal(q.demo),
     form);
 }
 
