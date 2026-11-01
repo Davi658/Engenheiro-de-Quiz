@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "locale": "pt-BR",
+  "demo": true,
+  "id": "beleza-unhas",
+  "title": "Seu talento merece um preço à altura.",
+  "theme": "rose",
+  "identification": [
+    {
+      "id": "nome",
+      "label": "Seu nome",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "email",
+      "label": "Seu email",
+      "type": "email",
+      "required": true
+    }
+  ],
+  "pages": [
+    {
+      "id": "etapa-1",
+      "title": "O atendimento",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "servico",
+          "label": "Qual serviço você quer simular?",
+          "required": true,
+          "options": [
+            {
+              "id": "tradicional",
+              "label": "Manicure tradicional",
+              "values": {
+                "minutes": "40",
+                "materials": "8"
+              }
+            },
+            {
+              "id": "gel",
+              "label": "Esmaltação em gel",
+              "values": {
+                "minutes": "60",
+                "materials": "18"
+              }
+            },
+            {
+              "id": "alongamento",
+              "label": "Alongamento",
+              "values": {
+                "minutes": "100",
+                "materials": "35"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-2",
+      "title": "O acabamento",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "acabamento",
+          "label": "Qual acabamento sua cliente procura?",
+          "required": true,
+          "options": [
+            {
+              "id": "discreto",
+              "label": "Discreto e uniforme",
+              "values": {
+                "minutes": "0",
+                "materials": "0"
+              }
+            },
+            {
+              "id": "simples",
+              "label": "Decoração simples",
+              "values": {
+                "minutes": "20",
+                "materials": "5"
+              }
+            },
+            {
+              "id": "elaborado",
+              "label": "Nail art elaborada",
+              "values": {
+                "minutes": "40",
+                "materials": "12"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-3",
+      "title": "A preparação",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "remocao",
+          "label": "Como está a unha para esse atendimento?",
+          "required": true,
+          "options": [
+            {
+              "id": "nao",
+              "label": "Pronta para iniciar",
+              "values": {
+                "minutes": "0",
+                "materials": "0"
+              }
+            },
+            {
+              "id": "sim",
+              "label": "Precisa remover o produto anterior",
+              "values": {
+                "minutes": "20",
+                "materials": "4"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-4",
+      "title": "A prioridade",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "prioridade",
+          "label": "Qual é a prioridade da cliente?",
+          "required": true,
+          "options": [
+            {
+              "id": "praticidade",
+              "label": "Praticidade no dia a dia"
+            },
+            {
+              "id": "equilibrio",
+              "label": "Equilíbrio entre estilo e praticidade"
+            },
+            {
+              "id": "marcante",
+              "label": "Visual marcante"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-5",
+      "title": "O tempo",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "disponibilidade",
+          "label": "Quanto tempo ela tem disponível?",
+          "required": true,
+          "options": [
+            {
+              "id": "60",
+              "label": "Até 60 minutos",
+              "values": {
+                "minutes": "60"
+              }
+            },
+            {
+              "id": "120",
+              "label": "Até 120 minutos",
+              "values": {
+                "minutes": "120"
+              }
+            },
+            {
+              "id": "180",
+              "label": "Até 180 minutos",
+              "values": {
+                "minutes": "180"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "result": {
+    "kind": "pricing-v1",
+    "contributionQuestions": [
+      "servico",
+      "acabamento",
+      "remocao"
+    ],
+    "durationKey": "minutes",
+    "materialsKey": "materials",
+    "availabilityQuestion": "disponibilidade",
+    "availabilityKey": "minutes",
+    "profileQuestion": "acabamento",
+    "profiles": {
+      "discreto": {
+        "label": "Minimalista Elegante",
+        "description": "Linhas limpas, acabamento delicado e beleza nos detalhes."
+      },
+      "simples": {
+        "label": "Criativa Versátil",
+        "description": "Um toque de personalidade que acompanha o dia a dia."
+      },
+      "elaborado": {
+        "label": "Arte em Destaque",
+        "description": "Criação expressiva, atenção aos detalhes e acabamento elaborado."
+      }
+    },
+    "priorityQuestion": "prioridade",
+    "priorityTexts": {
+      "praticidade": "A praticidade é a prioridade. Combine um acabamento fácil de manter com o tempo disponível.",
+      "equilibrio": "Estilo e praticidade dividem a atenção. Converse sobre manutenção e expectativas.",
+      "marcante": "Um visual marcante pede atenção à execução. Reserve tempo para cada detalhe."
+    },
+    "scenario": {
+      "currency": "BRL",
+      "operatingHourly": "12.00",
+      "compensationHourly": "24.00",
+      "feeRate": "0.05",
+      "targetMargins": [
+        "0.00",
+        "0.15",
+        "0.25"
+      ]
+    },
+    "packages": [
+      {
+        "id": "essencial",
+        "label": "Essencial · acabamento discreto",
+        "overrides": {
+          "acabamento": "discreto"
+        }
+      },
+      {
+        "id": "expressivo",
+        "label": "Expressivo · nail art elaborada",
+        "overrides": {
+          "acabamento": "elaborado"
+        }
+      }
+    ]
+  }
+}

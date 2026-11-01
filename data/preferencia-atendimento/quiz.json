@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "locale": "pt-BR",
+  "demo": true,
+  "id": "preferencia-atendimento",
+  "title": "Qual atendimento combina com você?",
+  "theme": "teal",
+  "identification": [
+    {
+      "id": "nome",
+      "label": "Seu nome",
+      "type": "text",
+      "required": true
+    }
+  ],
+  "pages": [
+    {
+      "id": "preferencias",
+      "title": "Seu jeito de atender",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Pequenas escolhas revelam o ritmo e o estilo do atendimento."
+        },
+        {
+          "type": "question",
+          "id": "ritmo",
+          "label": "Qual ritmo você prefere?",
+          "required": true,
+          "options": [
+            {
+              "id": "rapido",
+              "label": "Rápido e objetivo"
+            },
+            {
+              "id": "detalhado",
+              "label": "Detalhado e cuidadoso"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "acabamento",
+          "label": "Qual acabamento você prefere?",
+          "required": true,
+          "options": [
+            {
+              "id": "discreto",
+              "label": "Discreto"
+            },
+            {
+              "id": "elaborado",
+              "label": "Elaborado"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "result": {
+    "kind": "category-table-v1",
+    "questionIds": [
+      "ritmo",
+      "acabamento"
+    ],
+    "rows": [
+      {
+        "answers": {
+          "ritmo": "rapido",
+          "acabamento": "discreto"
+        },
+        "label": "Essencial Prático",
+        "description": "Seu estilo reúne um atendimento objetivo e um acabamento discreto."
+      },
+      {
+        "answers": {
+          "ritmo": "rapido",
+          "acabamento": "elaborado"
+        },
+        "label": "Expressivo Prático",
+        "description": "Seu estilo reúne um atendimento objetivo e um acabamento elaborado."
+      },
+      {
+        "answers": {
+          "ritmo": "detalhado",
+          "acabamento": "discreto"
+        },
+        "label": "Cuidado Discreto",
+        "description": "Seu estilo reúne um atendimento cuidadoso e um acabamento discreto."
+      },
+      {
+        "answers": {
+          "ritmo": "detalhado",
+          "acabamento": "elaborado"
+        },
+        "label": "Cuidado Elaborado",
+        "description": "Seu estilo reúne um atendimento cuidadoso e um acabamento elaborado."
+      }
+    ]
+  }
+}
