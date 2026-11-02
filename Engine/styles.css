@@ -115,3 +115,14 @@ dd { margin: 0; font-weight: 700; }
   h1 { font-size: 1.35rem; }
 }
 
+
+.hidden-costs-callout { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: .75rem 1rem; border-radius: 6px; margin: 1rem 0; }
+.hidden-costs-callout p { margin: .25rem 0 0; }
+.menu-recommendation { margin: 1.5rem 0; }
+.menu-guidelines { padding-left: 1.25rem; margin: .5rem 0; }
+.menu-guidelines li { margin: .4rem 0; }
+.whatsapp-script { margin: 1.5rem 0; }
+.script-box { background: #fdfaf7; border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: .85rem 1rem; margin: .75rem 0; font-style: italic; border-radius: 4px; }
+.evidence-sources { margin: 1.5rem 0 1rem; font-size: .9rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+.evidence-sources ul { padding-left: 1.2rem; margin: .4rem 0; }
+.limitations { color: var(--muted); font-size: .85rem; padding-left: 1.2rem; margin: .5rem 0; }

@@ -39,7 +39,7 @@ it('160 minutos gera incompatibilidade, prioridade não muda valores', () => {
 });
 it('identificação não participa do cálculo e moeda vem do cenário', () => {
  const r = evaluateQuiz(quiz, base); if (r.kind !== 'pricing-v1') throw Error();
- expect(r.feeRate).toBe('0.05'); expect(r.minimum).toBe('34.22'); expect(r.demo).toBe(true); expect(r.version).toBe('3.0.0');
+ expect(r.feeRate).toBe('0.05'); expect(r.minimum).toBe('34.22'); expect(r.demo).toBe(true); expect(r.version).toBe('4.0.0');
 });
 it('arredonda preços para cima ao centavo e rejeita taxa + margem >= 1', () => {
  expect(priceScenario('10', '0', '0.7').price).toBe('33.34');

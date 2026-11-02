@@ -78,7 +78,7 @@ test.describe('US2 — resultados coerentes após alterações', () => {
     await expect(page.getByText('supera o tempo disponível (60 minutos)')).toBeVisible();
     await expect(page.getByText('Nail Artist Exclusiva')).toBeVisible();
     await expect(page.getByTestId('diagnostico-preco')).toContainText('Déficit operacional estimado');
-    await expect(page.getByText('versão 3.0.0')).toBeVisible();
+    await expect(page.getByText('versão 4.0.0')).toBeVisible();
   });
 
   test('prioridade altera somente o texto explicativo', async ({ page }) => {

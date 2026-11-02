@@ -9,14 +9,12 @@ Projeto de Davi Diniz para executar quizzes web a partir de definições própri
 - [Escopo da primeira entrega](docs/primeira-entrega.md)
 - [Quiz piloto de beleza](docs/quiz-beleza.md)
 
-Spec Kit 1.2.5 instalado localmente com Python 3.14 e integração Codex. Constituição e especificação foram redigidas seguindo as skills e os modelos instalados. O protótipo está implementado. O piloto de unhas 3.0.0 aceita preço exato e compara com custos fictícios de referência; os resultados não são diagnósticos financeiros reais. Consulte o relatório de validação para as verificações e limitações atuais.
+Spec Kit 1.2.5 instalado localmente com Python 3.14 e integração Codex. Constituição e especificações foram redigidas seguindo as skills e os modelos instalados. O piloto de unhas 4.0.0 adota o formato de autoria v2 (`schemaVersion: 2`) com apresentação modular (`presentation`), oferta transparente (`offer`) e fontes metodológicas declaradas (`evidence`). Os resultados utilizam custos de referência para fins de simulação e orientação gerencial.
 
 - [Constituição v1.0.0](.specify/memory/constitution.md)
 - [Especificação da primeira funcionalidade](specs/001-quiz-configuravel/spec.md)
-- [Plano de implementação](specs/001-quiz-configuravel/plan.md)
-- [Tarefas de desenvolvimento](specs/001-quiz-configuravel/tasks.md)
-- [Guia rápido de execução](specs/001-quiz-configuravel/quickstart.md)
-- [Relatório de validação da primeira entrega](docs/validacao-primeira-entrega.md)
+- [Especificação de calibração e preço exato](specs/002-calibracao-real/spec.md)
+- [Especificação de formato de autoria e evidências](specs/003-formato-autoria/spec.md)
 - [Como adicionar um quiz](data/README.md)
 
 ## Como rodar o projeto
@@ -52,5 +50,4 @@ Acesse no navegador: `http://127.0.0.1:5173` ou diretamente `http://127.0.0.1:51
 
 1. Implementar backend e gateway de pagamento em etapas futuras.
 2. Armazenamento de dados reais e entrega por email.
-
-Especificação ativa: [comparação de preço](specs/002-calibracao-real/spec.md). Correções de precisão e resultado por hora: [decisões](specs/002-calibracao-real/correcoes-2026-11-02.md).
+3. Personalização dinâmica das entradas de custo e jornada de trabalho da profissional.

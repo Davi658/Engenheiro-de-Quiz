@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "version": "3.0.0",
+  "schemaVersion": 2,
+  "version": "4.0.0",
   "locale": "pt-BR",
   "demo": true,
   "id": "beleza-unhas",
@@ -68,6 +68,10 @@
       "title": "Arte e Acabamento",
       "blocks": [
         {
+          "type": "text",
+          "text": "O acabamento e a nail art exigem tempo dedicado de mesa, habilidade técnica e materiais extras (géis paint, pós cromados, pedrarias e pincéis de precisão)."
+        },
+        {
           "type": "question",
           "id": "acabamento",
           "label": "Qual nível de acabamento artístico é realizado?",
@@ -105,6 +109,10 @@
       "id": "etapa-3",
       "title": "Preparo e Remoção",
       "blocks": [
+        {
+          "type": "text",
+          "text": "A remoção correta protege a lâmina ungueal, mas consome brocas diamantadas/cerâmica e tempo adicional de atendimento."
+        },
         {
           "type": "question",
           "id": "remocao",
@@ -269,6 +277,52 @@
           "acabamento": "elaborado"
         }
       }
+    ]
+  },
+  "presentation": {
+    "preview": {
+      "title": "Sua prévia de atendimento",
+      "blocks": [
+        "profile",
+        "pricing-diagnosis",
+        "time-audit",
+        "hourly-rate",
+        "scenarios",
+        "hidden-costs"
+      ]
+    },
+    "report": {
+      "template": "pricing-report-v1",
+      "title": "Relatório Técnico e Comercial",
+      "blocks": [
+        "profile",
+        "executive-summary",
+        "pricing-diagnosis",
+        "cost-breakdown",
+        "margin-scenarios",
+        "packages",
+        "menu-recommendation",
+        "whatsapp-script"
+      ]
+    }
+  },
+  "offer": {
+    "mode": "demo",
+    "currency": "BRL",
+    "priceCents": null
+  },
+  "evidence": {
+    "sources": [
+      {
+        "title": "Metodologia de Formação de Preço para Serviços",
+        "url": "https://conhecimento.sebraers.com.br/wp-content/uploads/2023/08/E-Book-Como-formar-preco-de-servicos-12857.pdf",
+        "accessedOn": "2026-11-02",
+        "scope": "Diretrizes de rateio de despesas operacionais fixas por hora produtiva e margem sobre faturamento"
+      }
+    ],
+    "limitations": [
+      "Valores de materiais e insumos descartáveis utilizam médias técnicas de mercado; custos individuais variam conforme marca, rendimento e localidade.",
+      "As margens e remunerações sugeridas são parâmetros de referência e não representam garantia de lucro pessoal."
     ]
   }
 }

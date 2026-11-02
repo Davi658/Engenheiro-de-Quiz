@@ -1,5 +1,6 @@
 import type { Result } from '../core/evaluate';
 import type { Session } from '../core/session';
+import { resolvePresentation } from '../core/presentation';
 import { h, seal } from './dom';
 import { duration, money, percent } from './format';
 
@@ -49,38 +50,78 @@ export function actualPriceDiagnosisCard(diag: NonNullable<import('../core/prici
       h('div', {}, h('dt', {}, 'Seu preço informado'), h('dd', {}, money(diag.actualPrice))),
       h('div', {}, h('dt', {}, 'Margem estimada'), h('dd', {}, percent(diag.effectiveMargin))),
       h('div', {}, h('dt', {}, 'Resultado estimado por atendimento'), h('dd', {}, money(diag.profit))),
-      h('div', {}, h('dt', {}, 'Resultado estimado por hora'), h('dd', { 'data-testid':'resultado-hora' }, diag.profitPerHour===null?'Não disponível (duração zero)':`${money(diag.profitPerHour)}/h`))),
-    h('p',{class:'detail'},'Resultado após descontar taxas, custos e a remuneração de referência. Não corresponde ao valor líquido recebido no seu bolso.'));
+      h('div', {}, h('dt', {}, 'Resultado estimado por hora'), h('dd', { 'data-testid': 'resultado-hora' }, diag.profitPerHour === null ? 'Não disponível (duração zero)' : `${money(diag.profitPerHour)}/h`))),
+    h('p', { class: 'detail' }, 'Resultado após descontar taxas, custos e a remuneração de referência. Não corresponde ao valor líquido recebido no seu bolso.'));
 }
 
 export function renderPreview(s: Session, result: Result, handlers: PreviewHandlers) {
-  const body: (Node | null)[] = [profileCard(result)];
-  if (result.kind === 'pricing-v1') {
-    if (result.actualPriceDiagnosis) {
-      body.push(actualPriceDiagnosisCard(result.actualPriceDiagnosis));
-    }
-    body.push(
-      h('p', { class: 'explanation' }, result.explanation),
-      h('dl', { class: 'facts' },
-        h('div', {}, h('dt', {}, 'Duração estimada de mesa'), h('dd', { 'data-testid': 'duracao' }, duration(result.minutes))),
-        h('div', {}, h('dt', {}, 'Tempo de mesa planejado'), h('dd', {}, duration(result.available))),
-        h('div', {}, h('dt', {}, 'Preço mínimo do cenário'), h('dd', { 'data-testid': 'minimo' }, money(result.minimum)))),
-      result.compatible
-        ? h('p', { class: 'ok' }, 'Compatível: a duração estimada cabe no tempo disponível.')
-        : h('p', { class: 'warning', role: 'status' }, `Atenção: a duração estimada (${result.minutes} minutos) supera o tempo disponível (${result.available} minutos). O tempo não foi reduzido; considere outro acabamento ou mais tempo.`),
-      h('p', { class: 'alert' }, s.snapshot.demo
+  const { presentation, evidence } = resolvePresentation(s.snapshot);
+  const blocks: (Node | null)[] = [];
+
+  const blockRenderers: Record<string, () => Node | null> = {
+    profile: () => profileCard(result),
+    'pricing-diagnosis': () => (result.kind === 'pricing-v1' && result.actualPriceDiagnosis ? actualPriceDiagnosisCard(result.actualPriceDiagnosis) : null),
+    'time-audit': () => {
+      if (result.kind !== 'pricing-v1') return null;
+      return h('div', { class: 'time-audit' },
+        h('p', { class: 'explanation' }, result.explanation),
+        h('dl', { class: 'facts' },
+          h('div', {}, h('dt', {}, 'Duração estimada de mesa'), h('dd', { 'data-testid': 'duracao' }, duration(result.minutes))),
+          h('div', {}, h('dt', {}, 'Tempo de mesa planejado'), h('dd', {}, duration(result.available))),
+          h('div', {}, h('dt', {}, 'Preço mínimo do cenário'), h('dd', { 'data-testid': 'minimo' }, money(result.minimum)))),
+        result.compatible
+          ? h('p', { class: 'ok' }, 'Compatível: a duração estimada cabe no tempo disponível.')
+          : h('p', { class: 'warning', role: 'status' }, `Atenção: a duração estimada (${result.minutes} minutos) supera o tempo disponível (${result.available} minutos). O tempo não foi reduzido; considere outro acabamento ou mais tempo.`));
+    },
+    'hourly-rate': () => null,
+    scenarios: () => {
+      if (result.kind !== 'pricing-v1') return null;
+      return h('p', { class: 'alert' }, s.snapshot.demo
         ? `Neste exemplo fictício, cobrar menos de ${money(result.minimum)} não cobre os custos e a remuneração considerados.`
-        : `Com estas referências, cobrar menos de ${money(result.minimum)} não cobre os custos estimados e a remuneração considerada.`),
-      assumptions(s));
+        : `Com estas referências, cobrar menos de ${money(result.minimum)} não cobre os custos estimados e a remuneração considerada.`);
+    },
+    'hidden-costs': () => {
+      return h('div', { class: 'hidden-costs-callout' },
+        h('p', { class: 'eyebrow' }, 'Atenção aos Custos Invisíveis'),
+        h('p', {}, 'Cada atendimento consome kit descartável, preparadores químicos, brocas e energia da cabine LED/UV. Não deixe esses insumos saírem do seu ganho pessoal.'));
+    },
+  };
+
+  for (const b of presentation.preview.blocks) {
+    const fn = blockRenderers[b];
+    if (fn) {
+      const node = fn();
+      if (node) blocks.push(node);
+    }
   }
+
+  const evidenceNodes: (Node | null)[] = [];
+  if (evidence.sources.length > 0) {
+    evidenceNodes.push(
+      h('div', { class: 'evidence-sources' },
+        h('p', { class: 'eyebrow' }, 'Metodologia e Referências'),
+        h('ul', {}, evidence.sources.map(src =>
+          h('li', {},
+            h('a', { href: src.url, target: '_blank', rel: 'noopener noreferrer' }, src.title),
+            ` (${src.scope} · consultado em ${src.accessedOn})`))))
+    );
+  }
+  if (evidence.limitations.length > 0 && s.snapshot.schemaVersion === 2) {
+    evidenceNodes.push(
+      h('ul', { class: 'limitations', role: 'note' }, evidence.limitations.map(lim =>
+        h('li', {}, lim)))
+    );
+  }
+
   return h('section', { class: 'card' },
-    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Sua prévia de atendimento'),
+    h('h2', { id: 'titulo-etapa', tabindex: -1 }, presentation.preview.title),
     seal(s.snapshot.demo),
-    body,
+    blocks,
+    assumptions(s),
+    evidenceNodes,
     versionNote(s),
     h('div', { class: 'actions' },
       handlers.report && h('button', { type: 'button', onclick: handlers.report }, 'Ver relatório de demonstração'),
       h('button', { type: 'button', class: 'secondary', onclick: handlers.edit }, 'Editar respostas'),
       h('button', { type: 'button', class: 'link', onclick: handlers.restart }, 'Reiniciar')));
 }
-
