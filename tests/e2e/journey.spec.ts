@@ -2,31 +2,11 @@ import { test, expect } from '@playwright/test';
 import { PILOT, answerAll, completePilot, goBackTo, identify, reference } from './helpers';
 
 test.describe('US1 — responder o quiz piloto', () => {
-  test('identificação valida campos obrigatórios e formato de email', async ({ page }) => {
+  test('bloqueia avanço sem resposta, preserva escolhas ao voltar e avança para identificação final', async ({ page }) => {
     await page.goto(PILOT);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Diagnóstico de Precificação e Estilo para Nail Designers');
-    await expect(page.getByText('Use apenas dados de teste')).toBeVisible();
-
-    await page.getByRole('button', { name: 'Continuar' }).click();
-    await expect(page.getByText('Preencha este campo.')).toHaveCount(2);
-    await expect(page.getByLabel('Seu nome ou do seu espaço')).toBeFocused();
-    await expect(page.getByLabel('Seu nome ou do seu espaço')).toHaveAttribute('aria-describedby', 'erro-nome');
-
-    await page.getByLabel('Seu nome ou do seu espaço').fill('   ');
-    await page.getByLabel('Seu email de contato').fill('invalido');
-    await page.getByRole('button', { name: 'Continuar' }).click();
-    await expect(page.getByLabel('Seu nome ou do seu espaço')).toHaveAttribute('aria-invalid', 'true');
-    await expect(page.getByText('Informe um email válido')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Antes de começar' })).toBeVisible();
-
-    await identify(page);
     await expect(page.getByText('Página 1 de 6')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Procedimento e Técnica' })).toBeFocused();
-  });
 
-  test('bloqueia avanço sem resposta, preserva escolhas ao voltar e mostra a prévia com diagnóstico real', async ({ page }) => {
-    await page.goto(PILOT);
-    await identify(page);
     await page.getByRole('button', { name: 'Continuar' }).click();
     await expect(page.getByText('Escolha uma alternativa.')).toBeVisible();
     await expect(page.getByText('Página 1 de 6')).toBeVisible();
@@ -35,13 +15,26 @@ test.describe('US1 — responder o quiz piloto', () => {
     await page.getByRole('button', { name: 'Continuar' }).click();
     await page.getByRole('button', { name: 'Anterior' }).click();
     await expect(page.getByLabel('Manicure tradicional', { exact: false })).toBeChecked();
+  });
 
-    // Back to identification keeps the typed values.
-    await page.getByRole('button', { name: 'Anterior' }).click();
-    await expect(page.getByLabel('Seu email de contato')).toHaveValue('teste@example.com');
-    await page.getByRole('button', { name: 'Continuar' }).click();
-
+  test('identificação ao final valida campos obrigatórios e formato de email antes do resultado', async ({ page }) => {
+    await page.goto(PILOT);
     await answerAll(page, reference);
+    await expect(page.getByRole('heading', { name: 'Quase lá!' })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Ver diagnóstico completo' }).click();
+    await expect(page.getByText('Preencha este campo.')).toHaveCount(2);
+    await expect(page.getByLabel('Seu nome ou do seu espaço')).toBeFocused();
+    await expect(page.getByLabel('Seu nome ou do seu espaço')).toHaveAttribute('aria-describedby', 'erro-nome');
+
+    await page.getByLabel('Seu nome ou do seu espaço').fill('   ');
+    await page.getByLabel('Seu email de contato').fill('invalido');
+    await page.getByRole('button', { name: 'Ver diagnóstico completo' }).click();
+    await expect(page.getByLabel('Seu nome ou do seu espaço')).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByText('Informe um email válido')).toBeVisible();
+
+    await identify(page);
+    await expect(page.getByRole('heading', { name: 'Sua prévia de atendimento' })).toBeVisible();
     await expect(page.getByText('Metodologia técnica baseada em custos reais')).toBeVisible();
     await expect(page.getByText('Minimalista Elegante')).toBeVisible();
     await expect(page.getByTestId('duracao')).toHaveText('40 minutos');
@@ -53,8 +46,7 @@ test.describe('US1 — responder o quiz piloto', () => {
   test('reiniciar limpa identificação e respostas', async ({ page }) => {
     await completePilot(page);
     await page.getByRole('button', { name: 'Reiniciar' }).click();
-    await expect(page.getByLabel('Seu nome ou do seu espaço')).toHaveValue('');
-    await identify(page);
+    await expect(page.getByText('Página 1 de 6')).toBeVisible();
     await expect(page.getByLabel('Manicure tradicional', { exact: false })).not.toBeChecked();
   });
 

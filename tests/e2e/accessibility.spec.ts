@@ -14,13 +14,6 @@ const noHorizontalOverflow = (page: Page) =>
 
 test('fluxo completo do piloto somente por teclado', async ({ page }) => {
   await page.goto(PILOT);
-  await tabTo(page, page.getByLabel('Seu nome ou do seu espaço'));
-  await page.keyboard.type('Pessoa Teste');
-  await page.keyboard.press('Tab');
-  await expect(page.getByLabel('Seu email de contato')).toBeFocused();
-  await page.keyboard.type('teste@example.com');
-  await page.keyboard.press('Enter');
-
   for (let i = 1; i <= 6; i++) {
     await expect(page.getByText(`Página ${i} de 6`)).toBeVisible();
     await expect(page.locator('#titulo-etapa')).toBeFocused();
@@ -31,6 +24,16 @@ test('fluxo completo do piloto somente por teclado', async ({ page }) => {
     await tabTo(page, page.getByRole('button', { name: i === 6 ? 'Ver prévia' : 'Continuar' }));
     await page.keyboard.press('Enter');
   }
+
+  // Identificação final
+  await expect(page.getByRole('heading', { name: 'Quase lá!' })).toBeFocused();
+  await tabTo(page, page.getByLabel('Seu nome ou do seu espaço'));
+  await page.keyboard.type('Pessoa Teste');
+  await page.keyboard.press('Tab');
+  await expect(page.getByLabel('Seu email de contato')).toBeFocused();
+  await page.keyboard.type('teste@example.com');
+  await page.keyboard.press('Enter');
+
   await expect(page.getByRole('heading', { name: 'Sua prévia de atendimento' })).toBeFocused();
   await expect(page.getByTestId('minimo')).toHaveText('R$ 34,22');
   await tabTo(page, page.getByRole('button', { name: 'Ver relatório de demonstração' }));
@@ -40,7 +43,6 @@ test('fluxo completo do piloto somente por teclado', async ({ page }) => {
 
 test('erro de página foca a primeira pergunta inválida e é associado a ela', async ({ page }) => {
   await page.goto(PILOT);
-  await identify(page);
   await page.getByRole('button', { name: 'Continuar' }).click();
   const first = page.locator('input[type="radio"]').first();
   await expect(first).toBeFocused();
@@ -55,8 +57,6 @@ test.describe('360 px', () => {
     await page.goto('/');
     await noHorizontalOverflow(page);
     await page.goto(PILOT);
-    await noHorizontalOverflow(page);
-    await identify(page);
     await noHorizontalOverflow(page);
     await completePilot(page, [
       'Alongamento completo (fibra de vidro ou gel moldado)',
@@ -73,7 +73,6 @@ test.describe('360 px', () => {
 
   test('segundo quiz sem rolagem horizontal', async ({ page }) => {
     await page.goto(SECOND);
-    await identify(page, 'Pessoa Teste', null);
     await noHorizontalOverflow(page);
   });
 });

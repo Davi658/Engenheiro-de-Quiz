@@ -40,11 +40,18 @@ export function mountApp(root: HTMLElement, catalog: Catalog, search: string) {
   };
   const restart = () => { session = start(quiz); render(); };
   const toQuestions = (pageIndex: number) => { session.status = 'questions'; session.pageIndex = pageIndex; render(); };
+  const toIdentification = () => { session.status = 'identification'; render(); };
   const edit = () => toQuestions(session.snapshot.pages.length - 1);
 
   function screen(): Node {
     const s = session, q = s.snapshot;
-    if (s.status === 'identification') return renderIdentification(s, { next: () => toQuestions(0), restart });
+    if (s.status === 'identification') {
+      return renderIdentification(s, {
+        back: () => toQuestions(q.pages.length - 1),
+        next: () => { finish(s); render(); },
+        restart,
+      });
+    }
     if ((s.status === 'preview' || s.status === 'report') && s.result) {
       if (s.status === 'report' && s.result.kind === 'pricing-v1')
         return renderReport(s, { back: () => { s.status = 'preview'; render(); }, edit, restart });
@@ -56,18 +63,30 @@ export function mountApp(root: HTMLElement, catalog: Catalog, search: string) {
     // Any edit clears the result; fall back to the questions until the visitor concludes again.
     s.status = 'questions';
     const first = s.pageIndex === 0;
+    const last = s.pageIndex === q.pages.length - 1;
     return renderPage(s, {
-      back: first ? (q.identification.length ? () => { s.status = 'identification'; render(); } : undefined) : () => toQuestions(s.pageIndex - 1),
-      next: () => s.pageIndex === q.pages.length - 1 ? (finish(s), render()) : toQuestions(s.pageIndex + 1),
+      back: first ? undefined : () => toQuestions(s.pageIndex - 1),
+      next: () => {
+        if (last) {
+          if (q.identification.length && Object.keys(s.identification).length === 0) {
+            toIdentification();
+          } else {
+            finish(s);
+            render();
+          }
+        } else {
+          toQuestions(s.pageIndex + 1);
+        }
+      },
       restart,
     });
   }
-  render(false);
+  render(true);
 }
 
 function start(quiz: Quiz): Session {
   const s = createSession(quiz);
-  if (!quiz.identification.length) s.status = 'questions';
+  s.status = 'questions';
   return s;
 }
 

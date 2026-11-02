@@ -33,11 +33,13 @@ function actions(handlers: FormHandlers, submitLabel: string) {
 export function renderIdentification(s: Session, handlers: FormHandlers) {
   const q = s.snapshot;
   const form = h('form', { novalidate: true, 'aria-labelledby': 'titulo-etapa' },
-    h('p', { class: 'notice', role: 'note' }, 'Use apenas dados de teste. Nenhum email é enviado e nada fica armazenado: ao recarregar a página, a participação recomeça.'),
+    h('p', { class: 'notice', role: 'note' }, q.demo
+      ? 'Use apenas dados de teste. Nenhum email é enviado e nada fica armazenado: ao recarregar a página, a participação recomeça.'
+      : 'Seu diagnóstico está pronto! Informe seu nome e email para visualizar a análise completa de precificação e estilo.'),
     q.identification.map(f => h('div', { class: 'field', 'data-field': f.id },
       h('label', { for: `campo-${f.id}` }, f.label, f.required ? '' : ' (opcional)'),
       h('input', { id: `campo-${f.id}`, name: f.id, type: f.type, required: f.required, autocomplete: 'off', spellcheck: 'false', value: s.identification[f.id] ?? '' }))),
-    actions(handlers, 'Continuar'));
+    actions(handlers, 'Ver diagnóstico completo'));
   form.addEventListener('submit', e => {
     e.preventDefault();
     const values: Answers = {};
@@ -47,7 +49,7 @@ export function renderIdentification(s: Session, handlers: FormHandlers) {
     if (Object.keys(errors).length) showErrors(form, errors); else handlers.next();
   });
   return h('section', { class: 'card' },
-    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Antes de começar'),
+    h('h2', { id: 'titulo-etapa', tabindex: -1 }, 'Quase lá! Para quem geramos o resultado?'),
     form);
 }
 
