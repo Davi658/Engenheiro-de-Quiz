@@ -9,7 +9,7 @@ Projeto de Davi Diniz para executar quizzes web a partir de definições própri
 - [Escopo da primeira entrega](docs/primeira-entrega.md)
 - [Quiz piloto de beleza](docs/quiz-beleza.md)
 
-Spec Kit 1.2.5 instalado localmente com Python 3.14 e integração Codex. Constituição e especificação foram redigidas seguindo as skills e os modelos instalados. O protótipo da primeira funcionalidade está completamente implementado e testado.
+Spec Kit 1.2.5 instalado localmente com Python 3.14 e integração Codex. Constituição e especificação foram redigidas seguindo as skills e os modelos instalados. O protótipo está implementado. O piloto de unhas 3.0.0 aceita preço exato e compara com custos fictícios de referência; os resultados não são diagnósticos financeiros reais. Consulte o relatório de validação para as verificações e limitações atuais.
 
 - [Constituição v1.0.0](.specify/memory/constitution.md)
 - [Especificação da primeira funcionalidade](specs/001-quiz-configuravel/spec.md)
@@ -52,3 +52,5 @@ Acesse no navegador: `http://127.0.0.1:5173` ou diretamente `http://127.0.0.1:51
 
 1. Implementar backend e gateway de pagamento em etapas futuras.
 2. Armazenamento de dados reais e entrega por email.
+
+Especificação ativa: [comparação de preço](specs/002-calibracao-real/spec.md). Correções de precisão e resultado por hora: [decisões](specs/002-calibracao-real/correcoes-2026-11-02.md).

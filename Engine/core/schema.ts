@@ -4,7 +4,10 @@ const id = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).refine(v => !['construct
 const decimal = z.string().regex(/^\d+(\.\d+)?$/).max(40);
 const money = z.string().regex(/^\d+(\.\d{1,2})?$/).max(20);
 const option = z.strictObject({id, label:text, values:z.record(id,decimal).optional()});
-export const questionSchema = z.strictObject({type:z.literal('question'),id,label:text,required:z.boolean(),options:z.array(option).min(2)});
+export const questionSchema = z.strictObject({type:z.literal('question'),id,label:text,required:z.boolean(),input:z.enum(['choice','money']).default('choice'),options:z.array(option).default([])}).superRefine((q,ctx)=>{
+ if(q.input==='choice'&&q.options.length<2)ctx.addIssue({code:'custom',path:['options'],message:'Pelo menos duas alternativas são obrigatórias.'});
+ if(q.input==='money'&&q.options.length)ctx.addIssue({code:'custom',path:['options'],message:'Preço livre não aceita alternativas.'});
+});
 const profile = z.strictObject({label:text,description:text});
 const pricing = z.strictObject({
  kind:z.literal('pricing-v1'), contributionQuestions:z.array(id).min(1), durationKey:id, materialsKey:id,

@@ -1,5 +1,7 @@
 # Tasks: Calibração Real de Custos, Comparativo e Refinamento do Quiz de Beleza
 
+As tarefas históricas abaixo descrevem a versão 2.0.0. A revisão de 2026-11-02 identificou falhas; as tarefas corretivas T015–T019 e correcoes-2026-11-02.md prevalecem sobre afirmações anteriores de custos reais.
+
 **Feature**: `002-calibracao-real`  
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md)
 
@@ -41,3 +43,13 @@
 - [X] T013 Executar `npm run validate:quizzes`, `npm run typecheck`, `npm test` e `npm run test:e2e`.
 - [X] T014 Atualizar documentação e registrar evidências da entrega.
 
+## Correções da revisão de 2026-11-02
+
+- [X] T015 Corrigir .specify/feature.json e alinhar especificação/plano às estimativas de referência.
+- [X] T016 Implementar preço exato em Engine/core/schema.ts, validate.ts, evaluate.ts, session.ts e Engine/ui/form.ts; atualizar data/beleza-unhas/quiz.json e testes.
+- [X] T017 Distinguir equilíbrio em Engine/core/pricing.ts e testar os limites dos quatro estados.
+- [X] T018 Incluir resultado estimado por hora e ressalvas claras em Engine/ui/preview.ts, report.ts e dom.ts; verificar duração zero.
+- [X] T019 Executar unitários, tipos, build e E2E; atualizar docs/validacao-primeira-entrega.md e documentação de autoria com evidências reais.
+
+
+Validação das correções: 70 testes unitários, build e tipos aprovados; 20 E2E na execução integral e o teste adicional aprovado isoladamente após ajuste de expectativa de formatação. Evidências em docs/validacao-primeira-entrega.md.

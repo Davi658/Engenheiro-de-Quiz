@@ -29,3 +29,9 @@ Segundo quiz: ritmo [rapido, detalhado], acabamento [discreto, elaborado]. Quatr
 validateQuiz(unknown) retorna definição válida ou lista de erros. evaluateQuiz(definition, answers) retorna resultado ou erros de resposta. createSession fixa snapshot/version. Núcleo sem DOM, rede, storage ou filesystem.
 
 validate-quizzes falha com código diferente de zero e caminho do arquivo/propriedade/motivo. Rodar antes de dev/build e validar no carregamento. Quiz inválido exibe “Quiz indisponível”; id desconhecido exibe “Quiz não encontrado”. Não registrar respostas ou identificação.
+
+## Extensão vigente — 2026-11-02
+
+Perguntas continuam type=question; input é choice por padrão ou money para preço livre. Choice exige duas alternativas; money não permite alternativas e deve ser a pergunta obrigatória result.actualPriceQuestion. Nesse caso omitir actualPriceKey. Para preço por alternativas em outros quizzes, actualPriceKey permanece obrigatório. Valores livres aceitam de zero a 999999999,99, até duas casas, ponto ou vírgula, sem agrupadores; validação compartilhada na página e núcleo.
+
+O campo demo aceita boolean, mas não demonstra autenticidade financeira: ambos os quizzes atuais usam true e o modo false só apresenta aviso de referências estimadas. Piloto 3.0.0 usa valores fictícios, seis páginas e preço livre. Relatório e prévia exibem resultado estimado por hora após remuneração, null para duração zero; equilíbrio exato é separado de excedente positivo. Esta extensão prevalece sobre restrições anteriores conflitantes do contrato inicial.

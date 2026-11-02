@@ -54,6 +54,10 @@ export function renderIdentification(s: Session, handlers: FormHandlers) {
 }
 
 function question(s: Session, b: Question) {
+  if(b.input==='money')return h('div',{class:'field','data-field':b.id},
+    h('label',{for:`campo-${b.id}`},b.label),
+    h('p',{class:'detail'},'Digite o valor exato em reais, como 20,00. Sem separador de milhar.'),
+    h('input',{id:`campo-${b.id}`,name:b.id,type:'text',inputmode:'decimal',required:b.required,autocomplete:'off',value:s.answers[b.id]??'',oninput:(event)=>setAnswer(s,b.id,(event.target as HTMLInputElement).value)}));
   const legendId = `pergunta-${b.id}`;
   return h('fieldset', { class: 'field question', 'data-field': b.id },
     h('legend', { id: legendId }, b.label, b.required ? '' : ' (opcional)'),

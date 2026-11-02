@@ -5,7 +5,7 @@ test('relatório de demonstração: custos, três cenários, dois pacotes e nenh
   await completePilot(page);
   await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
   await expect(page.getByRole('heading', { name: 'Relatório Técnico e Comercial' })).toBeFocused();
-  await expect(page.getByText('Metodologia técnica baseada em custos reais')).toBeVisible();
+  await expect(page.getByText('Simulação com valores fictícios')).toBeVisible();
 
   const costs = page.locator('table.costs');
   await expect(costs.getByRole('row', { name: /Materiais/ })).toContainText('R$ 8,50');

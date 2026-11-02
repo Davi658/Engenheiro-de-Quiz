@@ -12,11 +12,11 @@ export function validateQuiz(input:unknown): {success:true;data:Quiz}|{success:f
  const qs=questions(q); unique(qs.map(x=>x.id),'pages.questions');
  const byId=new Map(qs.map(x=>[x.id,x]));
  qs.forEach(x=>unique(x.options.map(o=>o.id),`questions.${x.id}.options`));
- const ref=(key:string)=>{const v=byId.get(key);if(!v) error(`result.${key}`,'Pergunta inexistente.');else if(!v.required) error(`result.${key}`,'Pergunta usada por regra deve ser obrigatória.');return v;};
+ const ref=(key:string,allowMoney=false)=>{const v=byId.get(key);if(!v) error(`result.${key}`,'Pergunta inexistente.');else {if(!v.required) error(`result.${key}`,'Pergunta usada por regra deve ser obrigatória.');if(v.input==='money'&&!allowMoney)error(`result.${key}`,'Esta regra exige alternativas, não entrada monetária.');}return v;};
  const exact=(keys:string[],expected:string[],path:string)=>{if(keys.length!==expected.length || keys.some(k=>!expected.includes(k)))error(path,'Cobertura de opções inválida.');};
  const r=q.result;
  if(r.kind==='category-table-v1') {
-  unique(r.questionIds,'result.questionIds'); const refs=r.questionIds.map(ref);
+  unique(r.questionIds,'result.questionIds'); const refs=r.questionIds.map(key=>ref(key));
   const seen=new Set<string>();
   for(const [i,row] of r.rows.entries()) {
    exact(Object.keys(row.answers),r.questionIds,`result.rows.${i}`);
@@ -40,10 +40,13 @@ export function validateQuiz(input:unknown): {success:true;data:Quiz}|{success:f
   r.scenario.targetMargins.forEach((m,i)=>{if(new Decimal(m).gte(1)||fee.plus(m).gte(1))error(`result.scenario.targetMargins.${i}`,'Taxa + margem deve ser menor que 1.');});
   if(!r.scenario.targetMargins.some(m=>new Decimal(m).isZero()))error('result.scenario.targetMargins','Incluir margem zero para preço mínimo.');
   unique(r.scenario.targetMargins.map(m=>new Decimal(m).toString()),'result.scenario.targetMargins');
+  if(r.actualPriceKey&&!r.actualPriceQuestion)error('result.actualPriceQuestion','Pergunta de preço praticado obrigatória quando há métrica.');
   if(r.actualPriceQuestion) {
-   if(!r.actualPriceKey) error('result.actualPriceKey','Chave da métrica de preço praticado obrigatória.');
+   const apRef = ref(r.actualPriceQuestion,true);
+   if(apRef?.input==='money') {
+    if(r.actualPriceKey)error('result.actualPriceKey','Preço livre não usa chave de métrica.');
+   } else if(!r.actualPriceKey) error('result.actualPriceKey','Chave da métrica de preço praticado obrigatória.');
    else {
-    const apRef = ref(r.actualPriceQuestion);
     for(const o of apRef?.options??[]) {
      const v = o.values?.[r.actualPriceKey];
      if(!v || !/^\d+(\.\d{1,2})?$/.test(v) || new Decimal(v).lte(0)) error(`questions.${r.actualPriceQuestion}.${o.id}.${r.actualPriceKey}`,'Preço praticado deve ser valor decimal positivo.');
@@ -52,5 +55,6 @@ export function validateQuiz(input:unknown): {success:true;data:Quiz}|{success:f
   }
   r.packages.forEach((p,i)=>{if(!Object.keys(p.overrides).length)error(`result.packages.${i}`,'Substituição obrigatória.');for(const [k,v] of Object.entries(p.overrides)){const x=ref(k);if(x&&!x.options.some(o=>o.id===v))error(`result.packages.${i}.${k}`,'Alternativa inexistente.');}});
  }
+ for(const question of qs)if(question.input==='money'&&(r.kind!=='pricing-v1'||r.actualPriceQuestion!==question.id))error(`questions.${question.id}`,'Entrada monetária deve ser a pergunta de preço praticado.');
  return errors.length?{success:false,errors}:{success:true,data:q};
 }

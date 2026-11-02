@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "version": "3.0.0",
+  "locale": "pt-BR",
+  "demo": true,
+  "id": "beleza-unhas",
+  "title": "Diagnóstico de Precificação e Estilo para Nail Designers",
+  "theme": "rose",
+  "identification": [
+    {
+      "id": "nome",
+      "label": "Seu nome ou do seu espaço",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "email",
+      "label": "Seu email de contato",
+      "type": "email",
+      "required": true
+    }
+  ],
+  "pages": [
+    {
+      "id": "etapa-1",
+      "title": "Procedimento e Técnica",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Cada técnica tem um consumo específico de insumos descartáveis, preparadores químicos e tempo médio de cabine/mesa."
+        },
+        {
+          "type": "question",
+          "id": "servico",
+          "label": "Qual procedimento principal você quer precificar?",
+          "required": true,
+          "options": [
+            {
+              "id": "tradicional",
+              "label": "Manicure tradicional (cutilagem e esmaltação comum)",
+              "values": {
+                "minutes": "40",
+                "materials": "8.50"
+              }
+            },
+            {
+              "id": "gel",
+              "label": "Esmaltação em gel ou blindagem estruturada",
+              "values": {
+                "minutes": "60",
+                "materials": "18.00"
+              }
+            },
+            {
+              "id": "alongamento",
+              "label": "Alongamento completo (fibra de vidro ou gel moldado)",
+              "values": {
+                "minutes": "100",
+                "materials": "35.00"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-2",
+      "title": "Arte e Acabamento",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "acabamento",
+          "label": "Qual nível de acabamento artístico é realizado?",
+          "required": true,
+          "options": [
+            {
+              "id": "discreto",
+              "label": "Discreto e uniforme (cor única ou francesinha clássica)",
+              "values": {
+                "minutes": "0",
+                "materials": "0.00"
+              }
+            },
+            {
+              "id": "simples",
+              "label": "Decoração comercial (filha única, degradê ou foil)",
+              "values": {
+                "minutes": "20",
+                "materials": "5.00"
+              }
+            },
+            {
+              "id": "elaborado",
+              "label": "Nail art elaborada (encapsulada, pedrarias ou desenho à mão livre)",
+              "values": {
+                "minutes": "40",
+                "materials": "12.00"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-3",
+      "title": "Preparo e Remoção",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "remocao",
+          "label": "Há remoção de produto anterior ou manutenção prévia?",
+          "required": true,
+          "options": [
+            {
+              "id": "nao",
+              "label": "Unha limpa, pronta para o procedimento",
+              "values": {
+                "minutes": "0",
+                "materials": "0.00"
+              }
+            },
+            {
+              "id": "sim",
+              "label": "Necessita remoção química/mecânica de gel ou acrílico anterior",
+              "values": {
+                "minutes": "20",
+                "materials": "4.50"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-4",
+      "title": "Perfil e Posicionamento",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "prioridade",
+          "label": "Qual é a principal expectativa da cliente no seu atendimento?",
+          "required": true,
+          "options": [
+            {
+              "id": "praticidade",
+              "label": "Agilidade e durabilidade para a rotina"
+            },
+            {
+              "id": "equilibrio",
+              "label": "Elegância e durabilidade equilibradas"
+            },
+            {
+              "id": "marcante",
+              "label": "Exclusividade e impacto visual diferenciado"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-5",
+      "title": "Tempo de Mesa Planejado",
+      "blocks": [
+        {
+          "type": "question",
+          "id": "disponibilidade",
+          "label": "Qual o tempo máximo de mesa reservado na sua agenda para esse atendimento?",
+          "required": true,
+          "options": [
+            {
+              "id": "60",
+              "label": "Até 60 minutos (1 hora)",
+              "values": {
+                "minutes": "60"
+              }
+            },
+            {
+              "id": "120",
+              "label": "Até 120 minutos (2 horas)",
+              "values": {
+                "minutes": "120"
+              }
+            },
+            {
+              "id": "180",
+              "label": "Até 180 minutos (3 horas)",
+              "values": {
+                "minutes": "180"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-6",
+      "title": "Seu Preço Atual de Atendimento",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Informe o preço exato que você cobra. A comparação usa custos e duração fictícios de referência, não os seus custos individuais."
+        },
+        {
+          "type": "question",
+          "id": "preco-praticado",
+          "label": "Quanto você cobra por esse atendimento (R$)?",
+          "required": true,
+          "input": "money"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "kind": "pricing-v1",
+    "contributionQuestions": [
+      "servico",
+      "acabamento",
+      "remocao"
+    ],
+    "durationKey": "minutes",
+    "materialsKey": "materials",
+    "availabilityQuestion": "disponibilidade",
+    "availabilityKey": "minutes",
+    "actualPriceQuestion": "preco-praticado",
+    "profileQuestion": "acabamento",
+    "profiles": {
+      "discreto": {
+        "label": "Minimalista Elegante",
+        "description": "Foco em linhas puras, precisão milimétrica de cutilagem e acabamento delicado e refinado."
+      },
+      "simples": {
+        "label": "Criativa Versátil",
+        "description": "Harmonia entre arte comercial e rapidez de execução, excelente para fidelização semanal."
+      },
+      "elaborado": {
+        "label": "Nail Artist Exclusiva",
+        "description": "Atendimento premium com alto nível técnico, estruturação avançada e valor agregado superior."
+      }
+    },
+    "priorityQuestion": "prioridade",
+    "priorityTexts": {
+      "praticidade": "Sua cliente busca máxima durabilidade e agilidade. Garanta preparadores eficientes para evitar descolamentos precoces.",
+      "equilibrio": "A cliente equilibra estética e funcionalidade. Ofereça opções de manutenção preventiva a cada 20 dias.",
+      "marcante": "A cliente deseja unhas que chamem atenção. Destaque a qualidade dos produtos usados e reserve tempo sem pressa para fotos de portfólio."
+    },
+    "scenario": {
+      "currency": "BRL",
+      "operatingHourly": "12.00",
+      "compensationHourly": "24.00",
+      "feeRate": "0.05",
+      "targetMargins": [
+        "0.00",
+        "0.15",
+        "0.25"
+      ]
+    },
+    "packages": [
+      {
+        "id": "essencial",
+        "label": "Linha Essencial · Acabamento clássico e uniforme",
+        "overrides": {
+          "acabamento": "discreto"
+        }
+      },
+      {
+        "id": "expressivo",
+        "label": "Linha Premium · Nail art de alto destaque",
+        "overrides": {
+          "acabamento": "elaborado"
+        }
+      }
+    ]
+  }
+}

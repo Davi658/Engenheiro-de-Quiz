@@ -35,11 +35,11 @@ test.describe('US1 — responder o quiz piloto', () => {
 
     await identify(page);
     await expect(page.getByRole('heading', { name: 'Sua prévia de atendimento' })).toBeVisible();
-    await expect(page.getByText('Metodologia técnica baseada em custos reais')).toBeVisible();
+    await expect(page.getByText('Simulação com valores fictícios')).toBeVisible();
     await expect(page.getByText('Minimalista Elegante')).toBeVisible();
     await expect(page.getByTestId('duracao')).toHaveText('40 minutos');
     await expect(page.getByTestId('minimo')).toHaveText('R$ 34,22');
-    await expect(page.getByTestId('diagnostico-preco')).toContainText('Margem Saudável e Sustentável');
+    await expect(page.getByTestId('diagnostico-preco')).toContainText('Resultado estimado positivo');
     await expect(page.getByText('Compatível')).toBeVisible();
   });
 
@@ -71,14 +71,14 @@ test.describe('US2 — resultados coerentes após alterações', () => {
     await page.getByRole('button', { name: 'Continuar' }).click(); // para página 4 (prioridade)
     await page.getByRole('button', { name: 'Continuar' }).click(); // para página 5 (disponibilidade)
     await page.getByRole('button', { name: 'Continuar' }).click(); // para página 6 (preço)
-    await page.getByLabel('Até R$ 35,00').check();
+    await page.getByLabel('Quanto você cobra por esse atendimento (R$)?').fill('35,00');
     await page.getByRole('button', { name: 'Ver prévia' }).click();
 
     await expect(page.getByTestId('duracao')).toHaveText('160 minutos (2 h 40 min)');
     await expect(page.getByText('supera o tempo disponível (60 minutos)')).toBeVisible();
     await expect(page.getByText('Nail Artist Exclusiva')).toBeVisible();
-    await expect(page.getByTestId('diagnostico-preco')).toContainText('Prejuízo Operacional');
-    await expect(page.getByText('versão 2.0.0')).toBeVisible();
+    await expect(page.getByTestId('diagnostico-preco')).toContainText('Déficit operacional estimado');
+    await expect(page.getByText('versão 3.0.0')).toBeVisible();
   });
 
   test('prioridade altera somente o texto explicativo', async ({ page }) => {

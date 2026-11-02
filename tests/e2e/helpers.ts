@@ -8,7 +8,7 @@ export const reference = [
   'Unha limpa, pronta para o procedimento',
   'Agilidade e durabilidade para a rotina',
   'Até 60 minutos (1 hora)',
-  'R$ 50,00'
+  '50,00'
 ];
 
 export async function identify(page: Page, name = 'Pessoa Teste', email: string | null = 'teste@example.com') {
@@ -21,7 +21,8 @@ export async function identify(page: Page, name = 'Pessoa Teste', email: string 
 export async function answerAll(page: Page, labels: string[]) {
   for (const [i, label] of labels.entries()) {
     await expect(page.getByText(`Página ${i + 1} de ${labels.length}`)).toBeVisible();
-    await page.getByLabel(label, { exact: true }).check();
+    if(i===labels.length-1) await page.getByLabel('Quanto você cobra por esse atendimento (R$)?').fill(label);
+    else await page.getByLabel(label, { exact: true }).check();
     await page.getByRole('button', { name: i === labels.length - 1 ? 'Ver prévia' : 'Continuar' }).click();
   }
 }

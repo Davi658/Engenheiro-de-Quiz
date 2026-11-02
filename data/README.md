@@ -49,9 +49,9 @@ Cada quiz é um arquivo `data/<slug>/quiz.json`. O nome da pasta precisa ser igu
 
 - Chaves desconhecidas são rejeitadas. Textos são exibidos literalmente: HTML, scripts e expressões não são executados.
 - `identification` pode ser vazio (o quiz começa direto nas perguntas). `type` aceita `text` ou `email`.
-- IDs de campos, páginas e perguntas são únicos no quiz; IDs de alternativas são únicos na pergunta; cada pergunta tem pelo menos duas alternativas.
+- IDs de campos, páginas e perguntas são únicos no quiz; IDs de alternativas são únicos na pergunta; cada pergunta de escolha tem pelo menos duas alternativas; perguntas monetárias não têm alternativas.
 - Perguntas usadas por regras de resultado precisam ser obrigatórias.
-- `theme`: `rose` ou `teal`. `demo` é sempre `true` neste protótipo.
+- `theme`: `rose` ou `teal`. `demo` aceita boolean, mas ambos os quizzes atuais usam `true`. O valor `false` não comprova custos reais.
 - Ao mudar conteúdo publicado, aumente `version`. Cada participação guarda a versão usada no resultado.
 
 ## Tipos de resultado
@@ -63,3 +63,11 @@ Cada quiz é um arquivo `data/<slug>/quiz.json`. O nome da pasta precisa ser igu
 
 Em `pricing-v1`, valores ficam em `values` de cada alternativa como strings decimais (`"40"`, `"8.50"`): minutos inteiros e dinheiro com até duas casas. Taxa e cada margem precisam somar menos de 1. Um novo tipo de regra exige mudar o contrato e o Engine; quizzes com os tipos acima não exigem.
 
+
+## Preço exato (piloto 3.0.0)
+
+Uma pergunta com `type: "question"`, `input: "money"`, id, label e required=true recebe um preço livre, sem options. Em result, apontar actualPriceQuestion para seu id e omitir actualPriceKey. Perguntas sem input continuam de escolha única. Outros quizzes podem manter preço por alternativas usando actualPriceKey.
+
+Entrada aceita zero, até nove dígitos inteiros e duas casas decimais com ponto ou vírgula. Não aceita separadores de milhar, negativos nem expoentes. O piloto tem seis páginas e identifica a pessoa após responder.
+
+O preço é informado pela pessoa; materiais, taxa, despesas/hora e remuneração/hora permanecem referências fictícias. O relatório mostra excedente estimado por atendimento e por hora, após descontar a remuneração considerada. Duração zero gera resultado/hora indisponível. Dados pessoais devem ser apenas de teste.

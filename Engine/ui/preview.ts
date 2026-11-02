@@ -24,7 +24,7 @@ export function assumptions(s: Session) {
   }
   return h('p', { class: 'assumptions' },
     `Metodologia de precificação: despesas operacionais fixadas em ${money(r.scenario.operatingHourly)} por hora de mesa, remuneração profissional pretendida de ${money(r.scenario.compensationHourly)} por hora e reserva de ${percent(r.scenario.feeRate)} para taxas/impostos. `,
-    'Os custos de insumos variam conforme a técnica e arte selecionadas.');
+    'São referências estimadas, não custos individuais comprovados. Os resultados não indicam seu lucro ou prejuízo real.');
 }
 
 export function actualPriceDiagnosisCard(diag: NonNullable<import('../core/pricing').ActualPriceDiagnosis>) {
@@ -32,11 +32,13 @@ export function actualPriceDiagnosisCard(diag: NonNullable<import('../core/prici
     loss: 'diagnosis-card loss',
     sub_target: 'diagnosis-card sub-target',
     healthy: 'diagnosis-card healthy',
+    break_even: 'diagnosis-card break-even',
   };
   const statusLabels: Record<typeof diag.status, string> = {
-    loss: 'Prejuízo Operacional',
-    sub_target: 'Abaixo da Remuneração Ideal',
-    healthy: 'Margem Saudável e Sustentável',
+    loss: 'Déficit operacional estimado',
+    sub_target: 'Abaixo da remuneração de referência',
+    healthy: 'Resultado estimado positivo',
+    break_even: 'Ponto de equilíbrio estimado',
   };
 
   return h('div', { class: statusClasses[diag.status], 'data-testid': 'diagnostico-preco' },
@@ -45,8 +47,10 @@ export function actualPriceDiagnosisCard(diag: NonNullable<import('../core/prici
     h('p', { class: 'diagnosis-message' }, diag.message),
     h('dl', { class: 'diagnosis-facts' },
       h('div', {}, h('dt', {}, 'Seu preço informado'), h('dd', {}, money(diag.actualPrice))),
-      h('div', {}, h('dt', {}, 'Margem líquida real'), h('dd', {}, percent(diag.effectiveMargin))),
-      h('div', {}, h('dt', {}, 'Resultado líquido por atendimento'), h('dd', {}, money(diag.profit)))));
+      h('div', {}, h('dt', {}, 'Margem estimada'), h('dd', {}, percent(diag.effectiveMargin))),
+      h('div', {}, h('dt', {}, 'Resultado estimado por atendimento'), h('dd', {}, money(diag.profit))),
+      h('div', {}, h('dt', {}, 'Resultado estimado por hora'), h('dd', { 'data-testid':'resultado-hora' }, diag.profitPerHour===null?'Não disponível (duração zero)':`${money(diag.profitPerHour)}/h`))),
+    h('p',{class:'detail'},'Resultado após descontar taxas, custos e a remuneração de referência. Não corresponde ao valor líquido recebido no seu bolso.'));
 }
 
 export function renderPreview(s: Session, result: Result, handlers: PreviewHandlers) {
@@ -60,13 +64,13 @@ export function renderPreview(s: Session, result: Result, handlers: PreviewHandl
       h('dl', { class: 'facts' },
         h('div', {}, h('dt', {}, 'Duração estimada de mesa'), h('dd', { 'data-testid': 'duracao' }, duration(result.minutes))),
         h('div', {}, h('dt', {}, 'Tempo de mesa planejado'), h('dd', {}, duration(result.available))),
-        h('div', {}, h('dt', {}, 'Preço mínimo sustentável'), h('dd', { 'data-testid': 'minimo' }, money(result.minimum)))),
+        h('div', {}, h('dt', {}, 'Preço mínimo do cenário'), h('dd', { 'data-testid': 'minimo' }, money(result.minimum)))),
       result.compatible
         ? h('p', { class: 'ok' }, 'Compatível: a duração estimada cabe no tempo disponível.')
         : h('p', { class: 'warning', role: 'status' }, `Atenção: a duração estimada (${result.minutes} minutos) supera o tempo disponível (${result.available} minutos). O tempo não foi reduzido; considere outro acabamento ou mais tempo.`),
       h('p', { class: 'alert' }, s.snapshot.demo
         ? `Neste exemplo fictício, cobrar menos de ${money(result.minimum)} não cobre os custos e a remuneração considerados.`
-        : `Cobrar menos de ${money(result.minimum)} por esse procedimento não cobrirá o custo dos seus insumos e o valor da sua hora trabalhada.`),
+        : `Com estas referências, cobrar menos de ${money(result.minimum)} não cobre os custos estimados e a remuneração considerada.`),
       assumptions(s));
   }
   return h('section', { class: 'card' },

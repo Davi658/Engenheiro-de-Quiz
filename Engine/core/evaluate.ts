@@ -1,5 +1,6 @@
 import type { Answers, Quiz } from './schema';
 import { questions } from './validate';
+import { answerError, normalizeMoney } from './answers';
 import { D, priceScenario, evaluateActualPrice, type ActualPriceDiagnosis } from './pricing';
 type Common = {quizId:string;version:string;demo:boolean;profile:{label:string;description:string};explanation:string};
 export type PricingResult = Common & {
@@ -20,7 +21,7 @@ export type Result = PricingResult | (Common & {kind:'category-table-v1'});
 export function evaluateQuiz(q:Quiz,answers:Answers):Result {
  const qs=questions(q), selected=new Map<string,typeof qs[number]['options'][number]>();
  if(Object.keys(answers).some(k=>!qs.some(x=>x.id===k)))throw Error('Pergunta desconhecida.');
- for(const x of qs){const value=answers[x.id];const option=x.options.find(o=>o.id===value);if((x.required||value!==undefined)&&!option)throw Error('Preencha as respostas válidas.');if(option)selected.set(x.id,option);}
+ for(const x of qs){const value=answers[x.id];if(answerError(x,value))throw Error('Preencha as respostas válidas.');const option=x.options.find(o=>o.id===value);if(option)selected.set(x.id,option);}
  const r=q.result, common={quizId:q.id,version:q.version,demo:q.demo};
  if(r.kind==='category-table-v1') {const row=r.rows.find(row=>r.questionIds.every(k=>row.answers[k]===answers[k]));if(!row)throw Error('Resultado indisponível.');return {...common,kind:r.kind,profile:{label:row.label,description:row.description},explanation:row.description};}
  let duration=new D(0), materials=new D(0);
@@ -32,12 +33,13 @@ export function evaluateQuiz(q:Quiz,answers:Answers):Result {
  const scenarios=r.scenario.targetMargins.map(m=>priceScenario(cost.toString(),r.scenario.feeRate,m));
 
  let actualPriceDiagnosis: ActualPriceDiagnosis | undefined;
- if (r.actualPriceQuestion && r.actualPriceKey) {
+ if (r.actualPriceQuestion) {
    const opt = selected.get(r.actualPriceQuestion);
-   const val = opt?.values?.[r.actualPriceKey];
+   const priceQuestion=qs.find(q=>q.id===r.actualPriceQuestion)!;
+   const val = priceQuestion.input==='money'?normalizeMoney(answers[r.actualPriceQuestion])!:opt?.values?.[r.actualPriceKey!];
    if (val !== undefined) {
      const breakEvenCost = materials.plus(operating);
-     actualPriceDiagnosis = evaluateActualPrice(val, cost.toString(), r.scenario.feeRate, breakEvenCost.toString());
+     actualPriceDiagnosis = evaluateActualPrice(val, cost.toString(), r.scenario.feeRate, breakEvenCost.toString(),duration.toNumber());
    }
  }
 

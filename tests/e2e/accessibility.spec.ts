@@ -18,9 +18,14 @@ test('fluxo completo do piloto somente por teclado', async ({ page }) => {
     await expect(page.getByText(`Página ${i} de 6`)).toBeVisible();
     await expect(page.locator('#titulo-etapa')).toBeFocused();
     await page.keyboard.press('Tab');
-    await expect(page.locator('input[type="radio"]').first()).toBeFocused();
-    await page.keyboard.press('Space');
-    await expect(page.locator('input[type="radio"]').first()).toBeChecked();
+    if(i===6) {
+      await expect(page.getByLabel('Quanto você cobra por esse atendimento (R$)?')).toBeFocused();
+      await page.keyboard.type('50,00');
+    } else {
+      await expect(page.locator('input[type="radio"]').first()).toBeFocused();
+      await page.keyboard.press('Space');
+      await expect(page.locator('input[type="radio"]').first()).toBeChecked();
+    }
     await tabTo(page, page.getByRole('button', { name: i === 6 ? 'Ver prévia' : 'Continuar' }));
     await page.keyboard.press('Enter');
   }
@@ -64,7 +69,7 @@ test.describe('360 px', () => {
       'Necessita remoção química/mecânica de gel ou acrílico anterior',
       'Exclusividade e impacto visual diferenciado',
       'Até 60 minutos (1 hora)',
-      'Até R$ 35,00'
+      '35,00'
     ]);
     await noHorizontalOverflow(page);
     await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();

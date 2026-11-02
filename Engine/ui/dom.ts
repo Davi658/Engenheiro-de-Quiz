@@ -21,6 +21,6 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Attrs = 
 export const seal = (demo: boolean = true) =>
   demo
     ? h('p', { class: 'seal', role: 'note' }, 'Simulação com valores fictícios')
-    : h('p', { class: 'methodology-badge', role: 'note' }, '✓ Metodologia técnica baseada em custos reais de insumos e tempo de mesa');
+    : h('p', { class: 'methodology-badge', role: 'note' }, 'Estimativa baseada nas referências de custos e tempo deste quiz');
 
 

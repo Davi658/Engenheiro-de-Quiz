@@ -9,55 +9,19 @@ export function priceScenario(cost:string,feeRate:string,margin:string) {
 }
 
 export type ActualPriceDiagnosis = {
-  actualPrice: string;
-  fee: string;
-  netRevenue: string;
-  profit: string;
-  effectiveMargin: string;
-  status: 'loss' | 'sub_target' | 'healthy';
-  message: string;
+  actualPrice: string; fee: string; netRevenue: string; profit: string;
+  effectiveMargin: string; profitPerHour: string | null;
+  status: 'loss' | 'sub_target' | 'break_even' | 'healthy'; message: string;
 };
 
-export function evaluateActualPrice(actualPrice: string, cost: string, feeRate: string, breakEvenCost: string): ActualPriceDiagnosis {
-  const p = new D(actualPrice);
-  const fee = p.times(feeRate);
-  const netRevenue = p.minus(fee);
+export function evaluateActualPrice(actualPrice: string, cost: string, feeRate: string, breakEvenCost: string, minutes = 0): ActualPriceDiagnosis {
+  const p = new D(actualPrice), fee = p.times(feeRate), netRevenue = p.minus(fee);
   const profit = netRevenue.minus(cost);
-  const effectiveMargin = p.isZero() ? '0' : profit.div(p).toString();
-
-  // Se a receita líquida não cobre sequer os materiais e despesas operacionais básicas: prejuízo
-  if (netRevenue.lt(breakEvenCost)) {
-    return {
-      actualPrice,
-      fee: fee.toString(),
-      netRevenue: netRevenue.toString(),
-      profit: profit.toString(),
-      effectiveMargin,
-      status: 'loss',
-      message: 'Atenção: o valor cobrado atualmente não cobre sequer o custo dos materiais e despesas do atendimento. Você está tendo prejuízo.',
-    };
-  }
-
-  // Se cobre o básico mas sobra menos que o custo total com sua remuneração-alvo:
-  if (profit.lt(0)) {
-    return {
-      actualPrice,
-      fee: fee.toString(),
-      netRevenue: netRevenue.toString(),
-      profit: profit.toString(),
-      effectiveMargin,
-      status: 'sub_target',
-      message: 'O valor cobre seus custos diretos, mas paga menos que a remuneração por hora ideal pelo seu tempo de mesa.',
-    };
-  }
-
-  return {
-    actualPrice,
-    fee: fee.toString(),
-    netRevenue: netRevenue.toString(),
-    profit: profit.toString(),
-    effectiveMargin,
-    status: 'healthy',
-    message: 'Excelente! Seu preço atual cobre todos os custos, sua remuneração por tempo de mesa e gera margem de lucro.',
-  };
+  const common = { actualPrice:p.toString(), fee:fee.toString(), netRevenue:netRevenue.toString(), profit:profit.toString(),
+    effectiveMargin:p.isZero()?'0':profit.div(p).toString(),
+    profitPerHour:minutes>0?profit.times(60).div(minutes).toString():null };
+  if(netRevenue.lt(breakEvenCost))return {...common,status:'loss',message:'Neste cenário de referência, o preço informado não cobre os materiais e as despesas operacionais estimados.'};
+  if(profit.lt(0))return {...common,status:'sub_target',message:'Neste cenário, o preço cobre os custos operacionais estimados, mas não alcança a remuneração de referência.'};
+  if(profit.isZero())return {...common,status:'break_even',message:'Neste cenário, o preço cobre os custos e a remuneração de referência, sem excedente: ponto de equilíbrio.'};
+  return {...common,status:'healthy',message:'Neste cenário, o preço cobre os custos e a remuneração de referência e apresenta resultado estimado positivo. Isso não comprova sua margem real.'};
 }

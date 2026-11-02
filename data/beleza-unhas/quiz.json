@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "locale": "pt-BR",
-  "demo": false,
+  "demo": true,
   "id": "beleza-unhas",
   "title": "Diagnóstico de Precificação e Estilo para Nail Designers",
   "theme": "rose",
@@ -198,50 +198,14 @@
       "blocks": [
         {
           "type": "text",
-          "text": "Informe quanto você costuma cobrar hoje por essa combinação de serviço, para compararmos com os seus custos reais de insumos e tempo de mesa."
+          "text": "Informe o preço exato que você cobra. A comparação usa custos e duração fictícios de referência, não os seus custos individuais."
         },
         {
           "type": "question",
           "id": "preco-praticado",
-          "label": "Quanto você costuma cobrar por esse atendimento atualmente?",
+          "label": "Quanto você cobra por esse atendimento (R$)?",
           "required": true,
-          "options": [
-            {
-              "id": "faixa-35",
-              "label": "Até R$ 35,00",
-              "values": {
-                "price": "35.00"
-              }
-            },
-            {
-              "id": "faixa-50",
-              "label": "R$ 50,00",
-              "values": {
-                "price": "50.00"
-              }
-            },
-            {
-              "id": "faixa-75",
-              "label": "R$ 75,00",
-              "values": {
-                "price": "75.00"
-              }
-            },
-            {
-              "id": "faixa-110",
-              "label": "R$ 110,00",
-              "values": {
-                "price": "110.00"
-              }
-            },
-            {
-              "id": "faixa-150",
-              "label": "R$ 150,00 ou mais",
-              "values": {
-                "price": "150.00"
-              }
-            }
-          ]
+          "input": "money"
         }
       ]
     }
@@ -258,7 +222,6 @@
     "availabilityQuestion": "disponibilidade",
     "availabilityKey": "minutes",
     "actualPriceQuestion": "preco-praticado",
-    "actualPriceKey": "price",
     "profileQuestion": "acabamento",
     "profiles": {
       "discreto": {

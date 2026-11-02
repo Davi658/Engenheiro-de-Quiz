@@ -1,47 +1,24 @@
-# Implementation Plan: Calibração Real de Custos, Comparativo e Refinamento do Quiz de Beleza
+# Implementation Plan: correções da comparação de preço
 
-**Branch**: `main` (Feature `002-calibracao-real`) | **Date**: 2026-11-01 | **Spec**: [spec.md](spec.md)
+**Feature**: 002-calibracao-real | **Updated**: 2026-11-02
 
 ## Summary
 
-Evoluir o modelo de dados e o motor de cálculo (`pricing-v1`/`pricing-v2`) para incorporar a pergunta de **Preço Praticado pela Profissional**, permitindo calcular o **diagnóstico comparativo real**: ganho líquido real, margem alcançada e veredito financeiro (prejuízo, sub-remuneração ou lucro saudável). Atualizar o quiz `data/beleza-unhas/quiz.json` com custos reais de insumos/produtos, vocabulário autêntico de salão/mesa e desativação do selo demonstrativo (`demo: false`), exibindo a metodologia transparente.
+Preservar TypeScript/Vite, Zod e Decimal.js. Adicionar input=money ao contrato de pergunta, com escolha única como padrão. Preço livre não tem options; preço por alternativas continua suportado para outros conteúdos. Piloto passa a versão 3.0.0, demo=true, preço livre.
 
 ## Technical Context
 
-- **Linguagem**: TypeScript strict (Node 24 LTS).
-- **Dependências**: Vite 8.3, Zod 4, Decimal.js, Vitest 5, Playwright.
-- **Armazenamento**: Somente em memória na sessão ativa.
-- **Acessibilidade**: WCAG AA, navegação por teclado, 360px sem overflow horizontal.
-- **Compatibilidade**: Manter o quiz `preferencia-atendimento` intacto e sem regressões no motor genérico.
+- Normalização de moeda e validação de respostas em Engine/core/answers.ts, compartilhadas por session.ts e evaluate.ts.
+- Schema exige alternativas para choice e nenhuma para money. Validação semântica permite money apenas como actualPriceQuestion, sem actualPriceKey; demais estratégias continuam categóricas.
+- pricing.ts mantém status healthy por compatibilidade interna, mas texto do produto diz resultado estimado positivo. Novo status break_even para zero exato.
+- profitPerHour = profit * 60 / minutos estimados; null se minutos=0.
+- Interface mostra ressalvas e resultado por hora na prévia/relatório. Entrada via text/inputmode=decimal para suportar vírgula sem arredondamento do navegador.
+- Estado exclusivamente em memória; nenhum serviço externo.
 
 ## Constitution Check
 
-- **I. Motor configurável**: As regras continuam declarativas no JSON do quiz, permitindo que outros quizzes no futuro usem ou não comparação de preço praticado.
-- **II. Definições verificáveis**: Validação via Zod e semântica continua bloqueando configurações com referências ausentes ou números negativos.
-- **III. Versionamento**: O quiz de beleza avança para versão `2.0.0` (por ser uma mudança significativa de dados e perguntas).
-- **IV. Privacidade**: Nenhum dado pessoal ou resposta é enviado a terceiros ou salvo em storage.
-- **VII. Acessibilidade**: Operação por teclado e texto equivalente para o diagnóstico comparativo (sem depender exclusivamente de cores vermelho/verde).
-- **IX. Estimativas explícitas**: Transparência na metodologia de cálculo por tempo de mesa e insumos.
+Motor configurável, validação centralizada, snapshot versionado e privacidade preservados. Simulação explícita atende ao princípio IX. Pagamentos e entrega continuam fora do escopo. Testes cobrem cálculo, entradas e navegação.
 
-## Project Structure
+## Validation
 
-```text
-data/
-└── beleza-unhas/quiz.json            # Atualizado para v2.0.0 com dados reais e pergunta de preço praticado
-Engine/
-├── core/
-│   ├── schema.ts                    # Suporte a demo: boolean e campos comparativos opcionais no pricing
-│   ├── pricing.ts                   # Cálculo de comparação de preço praticado, breakEven e ganho líquido
-│   ├── evaluate.ts                  # Inclusão do diagnóstico comparativo no resultado
-│   └── validate.ts                  # Validação semântica das novas chaves opcionais
-├── ui/
-│   ├── dom.ts                       # Banner de metodologia real quando demo: false
-│   ├── preview.ts                   # Card de diagnóstico comparativo: Preço Atual vs. Mínimo Sustentável
-│   └── report.ts                    # Relatório aprofundando o ganho real por hora trabalhada
-tests/
-├── unit/
-│   ├── evaluation.test.ts           # Testes unitários do diagnóstico comparativo
-│   └── validation.test.ts           # Teste de validação do novo schema/regras
-└── e2e/
-    └── journey.spec.ts              # Validação E2E do fluxo com preço praticado
-```
+Unitários com preços exatos, zero, erros de formato, referências de schema e quatro estados. E2E com teclado, preenchimento/edição do preço, resultado/hora, aviso de simulação, 360 px e quiz categórico. Build, typecheck e validação dos dois JSON. Resultados reais registrados em docs/validacao-primeira-entrega.md, com plataforma e limitações.

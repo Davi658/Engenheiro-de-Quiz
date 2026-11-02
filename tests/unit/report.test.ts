@@ -10,7 +10,7 @@ const a = {
   remocao: 'nao',
   prioridade: 'praticidade',
   disponibilidade: '60',
-  'preco-praticado': 'faixa-50'
+  'preco-praticado': '50'
 };
 it('relatório discrimina custos e recalcula dois pacotes sem alterar respostas', () => {
  const r = evaluateReport(q.data,a); expect(r.result.cost).toBe('32.5'); expect(r.result.operating).toBe('8'); expect(r.result.compensation).toBe('16'); expect(r.result.materials).toBe('8.5');
