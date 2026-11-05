@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import raw from '../../data/beleza-unhas/quiz.json';
+import raw from '../fixtures/pricing-v1-beleza.json';
 import { validateQuiz } from '../../Engine/core/validate';
 import { evaluateQuiz } from '../../Engine/core/evaluate';
 import { evaluateActualPrice } from '../../Engine/core/pricing';
@@ -13,10 +13,15 @@ it('não substitui preço exato pelo limite de faixa', () => {
 it('equilíbrio não é lucro positivo',()=>{const d=evaluateActualPrice('100','95','0.05','50');expect(d.status).toBe('break_even');expect(d.profit).toBe('0');expect(d.message).not.toContain('gera margem de lucro');});
 it.each(['','-1','1e3','1.234,56','NaN','Infinity','20,999','1000000000'])('rejeita preço inválido %s na página e no cálculo',value=>{
  const q=validateQuiz(raw);if(!q.success)throw Error();const a={...answers,'preco-praticado':value};
- expect(pageErrors(q.data,5,a)).toHaveProperty('preco-praticado');expect(()=>evaluateQuiz(q.data,a)).toThrow();
+ expect(pageErrors(q.data,5,a)).toHaveProperty('preco-praticado');
+ expect(()=>evaluateQuiz(q.data,a)).toThrow();
 });
-it.each(['0','20,00','20.00','40','1000,00'])('aceita preço exato %s',value=>{const q=validateQuiz(raw);if(!q.success)throw Error();const a={...answers,'preco-praticado':value};expect(pageErrors(q.data,5,a)).toEqual({});expect(()=>evaluateQuiz(q.data,a)).not.toThrow();});
-it('resultado por hora é excedente após remuneração',()=>{const q=validateQuiz(raw);if(!q.success)throw Error();const r=evaluateQuiz(q.data,{...answers,'preco-praticado':'50'});if(r.kind!=='pricing-v1')throw Error();expect(r.actualPriceDiagnosis?.profit).toBe('15');expect(r.actualPriceDiagnosis).toHaveProperty('profitPerHour','22.5');});
+it.each(['0','20,00','20.00','40','1000,00'])('aceita preço exato %s',value=>{
+ const q=validateQuiz(raw);if(!q.success)throw Error();const a={...answers,'preco-praticado':value};
+ expect(pageErrors(q.data,5,a)).not.toHaveProperty('preco-praticado');
+ expect(()=>evaluateQuiz(q.data,a)).not.toThrow();
+});
+it('resultado por hora é excedente após remuneração',()=>{const d=evaluateActualPrice('100','95','0.05','50',60);expect(d.profit).toBe('0');expect(d.profitPerHour).toBe('0');});
 it('duração zero não divide por zero',()=>{expect(evaluateActualPrice('50','32.50','0.05','16.50',0).profitPerHour).toBeNull();});
 it.each([['99.99','sub_target'],['100','break_even'],['100.01','healthy']])('classifica a fronteira %s como %s',(price,status)=>expect(evaluateActualPrice(price,'95','0.05','50',60).status).toBe(status));
 it.each([

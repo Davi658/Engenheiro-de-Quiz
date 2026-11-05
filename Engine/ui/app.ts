@@ -53,11 +53,12 @@ export function mountApp(root: HTMLElement, catalog: Catalog, search: string) {
       });
     }
     if ((s.status === 'preview' || s.status === 'report') && s.result) {
-      if (s.status === 'report' && s.result.kind === 'pricing-v1')
+      const canReport = s.result.kind === 'pricing-v1' || s.result.kind === 'business-diagnosis-v1';
+      if (s.status === 'report' && canReport)
         return renderReport(s, { back: () => { s.status = 'preview'; render(); }, edit, restart });
       return renderPreview(s, s.result, {
         edit, restart,
-        report: s.result.kind === 'pricing-v1' ? () => { s.status = 'report'; render(); } : undefined,
+        report: canReport ? () => { s.status = 'report'; render(); } : undefined,
       });
     }
     // Any edit clears the result; fall back to the questions until the visitor concludes again.

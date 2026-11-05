@@ -229,3 +229,4 @@ describe('Contrato de Autoria v2 e Compatibilidade v1', () => {
     expect(validateQuiz(inv).success).toBe(false);
   });
 });
+

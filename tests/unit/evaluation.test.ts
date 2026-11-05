@@ -1,6 +1,6 @@
 import { it, expect } from 'vitest';
 import Decimal from 'decimal.js';
-import raw from '../../data/beleza-unhas/quiz.json';
+import raw from '../fixtures/pricing-v1-beleza.json';
 import second from '../../data/preferencia-atendimento/quiz.json';
 import { validateQuiz, questions } from '../../Engine/core/validate';
 import { evaluateQuiz } from '../../Engine/core/evaluate';
@@ -51,26 +51,20 @@ it.each([
  ['rapido', 'discreto', 'Essencial Prático'],
  ['rapido', 'elaborado', 'Expressivo Prático'],
  ['detalhado', 'discreto', 'Cuidado Discreto'],
- ['detalhado', 'elaborado', 'Cuidado Elaborado'],
-])('segundo quiz: %s + %s = %s, sem valores financeiros', (ritmo, acabamento, label) => {
- const v = validateQuiz(second); if (!v.success) throw Error();
- const r = evaluateQuiz(v.data, { ritmo, acabamento });
- expect(r.kind).toBe('category-table-v1'); expect(r.profile.label).toBe(label);
+ ['detalhado', 'elaborado', 'Cuidado Elaborado']
+])('segundo quiz: %s + %s = %s', (ritmo, acabamento, label) => {
+ const checkedSecond = validateQuiz(second); if (!checkedSecond.success) throw Error();
+ const r = evaluateQuiz(checkedSecond.data, { ritmo, acabamento });
+ expect(r.kind).toBe('category-table-v1');
+ expect(r.profile.label).toBe(label);
  expect(r).not.toHaveProperty('minutes'); expect(r).not.toHaveProperty('scenarios');
 });
 it('avalia o preço praticado informando os 3 status de diagnóstico', () => {
- // O piloto 3.0.0 recebe o preço exato como string decimal.
- // 1. Prejuízo (35: R$ 35.00 com 5% = R$ 33.25 líquida < custo total R$ 32.50? Não, cobre o básico de 16.50 mas se pegarmos alongamento elaborado com remoção: custo total ~ 100+ min)
- // Testando direto com alternativas:
  const rHealthy = evaluateQuiz(quiz, { ...base, 'preco-praticado': '50' });
  if (rHealthy.kind !== 'pricing-v1') throw Error();
  expect(rHealthy.actualPriceDiagnosis?.status).toBe('healthy');
  expect(rHealthy.actualPriceDiagnosis?.actualPrice).toBe('50');
 
- // Para alongamento completo (minutos: 100 + elaborado 40 + remocao 20 = 160 min):
- // Custo materiais: 35 + 12 + 4.5 = 51.50
- // Custo operacional + remuneração = 160/60 * 36 = 96.00 -> Custo total = 147.50
- // Cobrando 35 (R$ 35,00): líquida R$ 33.25 < breakEven (51.50 + operacional 32.00 = 83.50) -> Prejuízo!
  const rLoss = evaluateQuiz(quiz, {
    ...base,
    servico: 'alongamento',
@@ -81,7 +75,6 @@ it('avalia o preço praticado informando os 3 status de diagnóstico', () => {
  if (rLoss.kind !== 'pricing-v1') throw Error();
  expect(rLoss.actualPriceDiagnosis?.status).toBe('loss');
 
- // Cobrando 110 (R$ 110,00): líquida R$ 104.50 >= breakEven 83.50, mas < Custo total 147.50 -> sub_target
  const rSub = evaluateQuiz(quiz, {
    ...base,
    servico: 'alongamento',

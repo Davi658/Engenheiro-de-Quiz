@@ -1,46 +1,56 @@
 import { test, expect } from '@playwright/test';
-import { completePilot, goBackTo } from './helpers';
+import { completePilot } from './helpers';
 
-test('relatório de demonstração: custos, três cenários, dois pacotes e nenhuma cobrança', async ({ page }) => {
+test('relatório executivo demonstrativo: DRE, serviços, capacidade e plano 30/60/90 dias sem cobrança', async ({ page }) => {
   await completePilot(page);
-  await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
-  await expect(page.getByRole('heading', { name: 'Relatório Técnico e Comercial' })).toBeFocused();
-  await expect(page.getByText('Simulação com valores fictícios')).toBeVisible();
+  await page.getByRole('button', { name: 'Ver relatório completo' }).click();
+  await expect(page.getByRole('heading', { name: 'Seu Plano de Evolução Profissional e Financeira' })).toBeFocused();
+  await expect(page.getByText('Protótipo demonstrativo')).toBeVisible();
 
-  const costs = page.locator('table.costs');
-  await expect(costs.getByRole('row', { name: /Materiais/ })).toContainText('R$ 8,50');
-  await expect(costs.getByRole('row', { name: /Despesas operacionais/ })).toContainText('R$ 8,00');
-  await expect(costs.getByRole('row', { name: /Remuneração/ })).toContainText('R$ 16,00');
-  await expect(page.getByTestId('custo')).toHaveText('R$ 32,50');
+  // DRE simples
+  const dre = page.locator('table.dre-table');
+  await expect(dre).toBeVisible();
+  await expect(dre.getByRole('row', { name: /Faturamento Bruto/ })).toContainText('R$ 2.000,00');
+  await expect(dre.getByRole('row', { name: /Insumos e Materiais/ })).toContainText('-R$ 340,00');
+  await expect(dre.getByRole('row', { name: /Margem de Contribuição Total/ })).toContainText('R$ 1.560,00');
 
-  const scenarios = page.getByTestId('cenario');
-  await expect(scenarios).toHaveCount(3);
-  await expect(scenarios.locator('.price')).toHaveText(['R$ 34,22', 'R$ 40,63', 'R$ 46,43']);
-  await expect(scenarios.first()).toContainText('Taxa (5%)');
-  await expect(scenarios.first()).toContainText('R$ 1,71');
+  // Tabela de serviços e preços Sebrae
+  const servicesTable = page.locator('table.services-table');
+  await expect(servicesTable).toBeVisible();
+  await expect(servicesTable.getByRole('row', { name: /Manicure tradicional/ })).toBeVisible();
 
-  const packages = page.getByTestId('pacote');
-  await expect(packages).toHaveCount(2);
-  await expect(packages.first()).toContainText('Linha Essencial · Acabamento clássico e uniforme (igual à sua escolha)');
-  await expect(packages.nth(1)).toContainText('80 minutos');
-  await expect(packages.nth(1)).toContainText('Supera o tempo disponível');
+  // Plano de ação
+  const plan = page.locator('.action-plan');
+  await expect(plan).toBeVisible();
+  await expect(page.locator('.plan-card')).toHaveCount(3);
 
-  await expect(page.getByRole('button', { name: /comprar|pagar|enviar/i })).toHaveCount(0);
-  await expect(page.locator('input')).toHaveCount(0);
+  // Sem botões de pagamento ou cobrança
+  await expect(page.getByRole('button', { name: /comprar|pagar|checkout|pix/i })).toHaveCount(0);
 });
 
-test('editar respostas invalida o relatório e recalcula sem valores antigos', async ({ page }) => {
+test('editar respostas invalida o relatório e recalcula sem dados antigos', async ({ page }) => {
   await completePilot(page);
-  await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
+  await page.getByRole('button', { name: 'Ver relatório completo' }).click();
   await page.getByRole('button', { name: 'Editar respostas' }).click();
-  await goBackTo(page, 2);
-  await page.getByLabel('Decoração comercial', { exact: false }).check();
-  for (let i = 0; i < 4; i++) await page.getByRole('button', { name: 'Continuar' }).click();
-  await page.getByRole('button', { name: 'Ver prévia' }).click();
-  await expect(page.locator('.profile-label')).toHaveText('Criativa Versátil');
-  await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
-  await expect(page.getByTestId('custo')).toHaveText('R$ 49,50');
-  await expect(page.getByTestId('cenario').locator('.price')).not.toContainText(['R$ 34,22']);
-  await expect(page.getByTestId('pacote').first()).not.toContainText('igual à sua escolha');
-});
 
+  // Volta para página 3 e altera quantidade para 50
+  while (!(await page.getByText('Página 3 de 9').isVisible())) {
+    await page.getByRole('button', { name: 'Anterior' }).click();
+  }
+  await page.locator('#campo-qtd-tradicional').fill('50');
+
+  // Avança até o final
+  for (let i = 3; i < 9; i++) {
+    await page.getByRole('button', { name: 'Continuar' }).click();
+  }
+  await page.getByRole('button', { name: 'Ver prévia' }).click();
+
+  // Verifica que o faturamento na prévia mudou para 50 x 50 = 2500
+  await expect(page.getByTestId('total-atendimentos')).toHaveText('50');
+  await expect(page.getByTestId('faturamento-mensal')).toHaveText('R$ 2.500,00');
+
+  // Abre o relatório novamente
+  await page.getByRole('button', { name: 'Ver relatório completo' }).click();
+  const dre = page.locator('table.dre-table');
+  await expect(dre.getByRole('row', { name: /Faturamento Bruto/ })).toContainText('R$ 2.500,00');
+});

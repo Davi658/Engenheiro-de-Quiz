@@ -4,7 +4,7 @@ import { SECOND, identify } from './helpers';
 test('catálogo descobre os dois quizzes automaticamente', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Escolha um quiz' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Diagnóstico de Precificação e Estilo para Nail Designers' })).toHaveAttribute('href', '?quiz=beleza-unhas');
+  await expect(page.getByRole('link', { name: /Diagnóstico de Precificação/i })).toHaveAttribute('href', '?quiz=beleza-unhas');
   await page.getByRole('link', { name: 'Qual atendimento combina com você?' }).click();
   await expect(page).toHaveURL(/\?quiz=preferencia-atendimento$/);
 });

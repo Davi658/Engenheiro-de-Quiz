@@ -1,23 +1,25 @@
 import { describe, it, expect } from 'vitest';
 import { validateQuiz } from '../../Engine/core/validate';
 import { fixture } from '../fixtures/invalid-quizzes';
-import raw from '../../data/beleza-unhas/quiz.json';
+import raw from '../fixtures/pricing-v1-beleza.json';
 import { buildCatalog, catalog } from '../../Engine/content/catalog';
+
 describe('contrato de autoria', () => {
  it('aceita quiz categórico completo', () => expect(validateQuiz(fixture()).success).toBe(true));
  it.each([
   ['chave desconhecida', (q: any) => q.execute = 'alert(1)'],
   ['opções insuficientes', (q: any) => q.pages[0].blocks[0].options.pop()],
-  ['id duplicado', (q: any) => q.pages.push(q.pages[0])],
-  ['opção duplicada', (q: any) => q.pages[0].blocks[0].options[1].id = 'a'],
-  ['referência inválida', (q: any) => q.result.questionIds = ['desconhecida']],
+  ['id duplicado', (q: any) => q.pages[0].blocks.push(structuredClone(q.pages[0].blocks[0]))],
+  ['opção duplicada', (q: any) => q.pages[0].blocks[0].options.push(structuredClone(q.pages[0].blocks[0].options[0]))],
+  ['referência inválida', (q: any) => q.result.questionIds = ['inexistente']],
   ['tabela incompleta', (q: any) => q.result.rows.pop()],
-  ['linha duplicada', (q: any) => q.result.rows.push(q.result.rows[0])],
+  ['linha duplicada', (q: any) => q.result.rows.push(structuredClone(q.result.rows[0]))],
   ['regra opcional', (q: any) => q.pages[0].blocks[0].required = false],
-  ['negativo', (q: any) => q.pages[0].blocks[0].options[0].values = { cost: '-1' }],
+  ['negativo', (q: any) => q.pages[0].blocks[0].options[0].values = { minutes: '-1' }],
   ['protótipo', (q: any) => q.id = '__proto__'],
  ])('rejeita %s', (_, mutate) => { const q = fixture(); mutate(q); expect(validateQuiz(q).success).toBe(false); });
 });
+
 describe('regras numéricas do piloto', () => {
  const pilot = () => structuredClone(raw) as any;
  it('aceita o piloto', () => expect(validateQuiz(pilot()).success).toBe(true));
@@ -42,6 +44,7 @@ describe('regras numéricas do piloto', () => {
   expect(r.success).toBe(false); if (!r.success) expect(r.errors[0].path).not.toBe('');
  });
 });
+
 describe('catálogo', () => {
  it('indisponibiliza arquivos inválidos, slug divergente e colisões', () => {
   const broken = fixture() as any; broken.result.rows.pop();

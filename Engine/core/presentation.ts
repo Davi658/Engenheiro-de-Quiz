@@ -7,7 +7,7 @@ export type ResolvedPresentation = {
 };
 
 export function resolvePresentation(quiz: Quiz): ResolvedPresentation {
-  if (quiz.schemaVersion === 2) {
+  if (quiz.schemaVersion === 2 || quiz.schemaVersion === 3) {
     return {
       presentation: quiz.presentation,
       offer: quiz.offer,

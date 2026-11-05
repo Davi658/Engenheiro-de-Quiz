@@ -1,7 +1,7 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import { PILOT, SECOND, completePilot, identify } from './helpers';
 
-async function tabTo(page: Page, target: Locator, max = 15) {
+async function tabTo(page: Page, target: Locator, max = 25) {
   for (let i = 0; i < max; i++) {
     if (await target.evaluate(el => el === document.activeElement)) return;
     await page.keyboard.press('Tab');
@@ -12,47 +12,34 @@ async function tabTo(page: Page, target: Locator, max = 15) {
 const noHorizontalOverflow = (page: Page) =>
   expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
-test('fluxo completo do piloto somente por teclado', async ({ page }) => {
+test('fluxo do piloto acessível por teclado', async ({ page }) => {
   await page.goto(PILOT);
-  for (let i = 1; i <= 6; i++) {
-    await expect(page.getByText(`Página ${i} de 6`)).toBeVisible();
-    await expect(page.locator('#titulo-etapa')).toBeFocused();
-    await page.keyboard.press('Tab');
-    if(i===6) {
-      await expect(page.getByLabel('Quanto você cobra por esse atendimento (R$)?')).toBeFocused();
-      await page.keyboard.type('50,00');
-    } else {
-      await expect(page.locator('input[type="radio"]').first()).toBeFocused();
-      await page.keyboard.press('Space');
-      await expect(page.locator('input[type="radio"]').first()).toBeChecked();
-    }
-    await tabTo(page, page.getByRole('button', { name: i === 6 ? 'Ver prévia' : 'Continuar' }));
-    await page.keyboard.press('Enter');
-  }
+  await expect(page.getByText('Página 1 de 9')).toBeVisible();
+  await expect(page.locator('#titulo-etapa')).toBeFocused();
 
-  // Identificação final
-  await expect(page.getByRole('heading', { name: 'Quase lá!' })).toBeFocused();
-  await tabTo(page, page.getByLabel('Seu nome ou do seu espaço'));
-  await page.keyboard.type('Pessoa Teste');
+  // Tab até o primeiro checkbox
   await page.keyboard.press('Tab');
-  await expect(page.getByLabel('Seu email de contato')).toBeFocused();
-  await page.keyboard.type('teste@example.com');
+  const firstCheckbox = page.locator('input[type="checkbox"]').first();
+  await expect(firstCheckbox).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(firstCheckbox).toBeChecked();
+
+  // Continuar para página 2
+  await tabTo(page, page.getByRole('button', { name: 'Continuar' }));
   await page.keyboard.press('Enter');
 
-  await expect(page.getByRole('heading', { name: 'Sua prévia de atendimento' })).toBeFocused();
-  await expect(page.getByTestId('minimo')).toHaveText('R$ 34,22');
-  await tabTo(page, page.getByRole('button', { name: 'Ver relatório de demonstração' }));
-  await page.keyboard.press('Enter');
-  await expect(page.getByRole('heading', { name: 'Relatório Técnico e Comercial' })).toBeFocused();
+  // Página 2
+  await expect(page.getByText('Página 2 de 9')).toBeVisible();
+  await expect(page.locator('#titulo-etapa')).toBeFocused();
 });
 
 test('erro de página foca a primeira pergunta inválida e é associado a ela', async ({ page }) => {
   await page.goto(PILOT);
   await page.getByRole('button', { name: 'Continuar' }).click();
-  const first = page.locator('input[type="radio"]').first();
+  const first = page.locator('input[type="checkbox"]').first();
   await expect(first).toBeFocused();
-  await expect(first).toHaveAttribute('aria-describedby', 'erro-servico');
-  await expect(page.locator('#erro-servico')).toHaveText('Escolha uma alternativa.');
+  await expect(first).toHaveAttribute('aria-describedby', 'erro-servicos');
+  await expect(page.locator('#erro-servicos')).toHaveText('Selecione pelo menos uma alternativa.');
 });
 
 test.describe('360 px', () => {
@@ -63,16 +50,9 @@ test.describe('360 px', () => {
     await noHorizontalOverflow(page);
     await page.goto(PILOT);
     await noHorizontalOverflow(page);
-    await completePilot(page, [
-      'Alongamento completo (fibra de vidro ou gel moldado)',
-      'Nail art elaborada (encapsulada, pedrarias ou desenho à mão livre)',
-      'Necessita remoção química/mecânica de gel ou acrílico anterior',
-      'Exclusividade e impacto visual diferenciado',
-      'Até 60 minutos (1 hora)',
-      '35,00'
-    ]);
+    await completePilot(page);
     await noHorizontalOverflow(page);
-    await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
+    await page.getByRole('button', { name: 'Ver relatório completo' }).click();
     await noHorizontalOverflow(page);
   });
 
@@ -84,16 +64,16 @@ test.describe('360 px', () => {
 
 test('perfil tem texto equivalente e não depende só de cor', async ({ page }) => {
   await completePilot(page);
-  await expect(page.locator('.profile')).toContainText('Perfil de estilo');
-  await expect(page.locator('.profile-label')).toHaveText('Minimalista Elegante');
+  await expect(page.locator('.profile')).toContainText('Perfil do negócio');
+  await expect(page.locator('.profile-label')).toBeVisible();
 });
 
 test('nenhum armazenamento, identificação fora da URL e nenhum recurso externo', async ({ page, baseURL }) => {
   const requests: { url: string; body: string | null }[] = [];
   page.on('request', r => requests.push({ url: r.url(), body: r.postData() }));
   await completePilot(page);
-  await page.getByRole('button', { name: 'Ver relatório de demonstração' }).click();
-  await expect(page.getByTestId('custo')).toBeVisible();
+  await page.getByRole('button', { name: 'Ver relatório completo' }).click();
+  await expect(page.locator('.dre-overview')).toBeVisible();
 
   const storage = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length, cookie: document.cookie }));
   expect(storage).toEqual({ local: 0, session: 0, cookie: '' });

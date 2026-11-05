@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 2,
-  "version": "4.0.0",
+  "schemaVersion": 3,
+  "version": "6.0.0",
   "locale": "pt-BR",
   "demo": true,
   "id": "beleza-unhas",
-  "title": "Diagnóstico de Precificação e Estilo para Nail Designers",
+  "title": "Diagnóstico de Precificação e Saúde do Negócio para Nail Designers",
   "theme": "rose",
   "identification": [
     {
@@ -22,307 +22,2003 @@
   ],
   "pages": [
     {
-      "id": "etapa-1",
-      "title": "Procedimento e Técnica",
+      "id": "etapa-1-servicos",
+      "title": "1. Serviços Oferecidos",
+      "subtitle": "Selecione as técnicas que compõem o seu cardápio de atendimentos",
       "blocks": [
         {
           "type": "text",
-          "text": "Cada técnica tem um consumo específico de insumos descartáveis, preparadores químicos e tempo médio de cabine/mesa."
+          "variant": "lead",
+          "marginBottom": "relaxed",
+          "text": "Seu talento merece um plano. Vamos conectar sua rotina, suas clientes e seus objetivos a próximos passos possíveis. Nesta demonstração, o relatório está aberto, sem cobrança."
         },
         {
           "type": "question",
-          "id": "servico",
-          "label": "Qual procedimento principal você quer precificar?",
+          "id": "servicos",
+          "label": "Quais procedimentos você oferece no seu cardápio?",
+          "helpText": "Você pode selecionar vários. Se fizer um procedimento não listado, marque 'Outro serviço'.",
           "required": true,
+          "input": "multi-choice",
+          "variant": "cards",
+          "columns": "2",
+          "marginBottom": "relaxed",
           "options": [
             {
               "id": "tradicional",
-              "label": "Manicure tradicional (cutilagem e esmaltação comum)",
-              "values": {
-                "minutes": "40",
-                "materials": "8.50"
-              }
+              "label": "Manicure tradicional (cutilagem e esmaltação comum) — avulso",
+              "description": "Cutilagem clássica e esmaltação convencional",
+              "icon": "💅",
+              "badge": "Avulso"
             },
             {
               "id": "gel",
-              "label": "Esmaltação em gel ou blindagem estruturada",
-              "values": {
-                "minutes": "60",
-                "materials": "18.00"
-              }
+              "label": "Esmaltação em gel ou blindagem estruturada — avulso",
+              "description": "Durabilidade prolongada e secagem em cabine LED/UV",
+              "icon": "💎",
+              "badge": "Avulso"
             },
             {
               "id": "alongamento",
-              "label": "Alongamento completo (fibra de vidro ou gel moldado)",
-              "values": {
-                "minutes": "100",
-                "materials": "35.00"
-              }
+              "label": "Alongamento completo (fibra de vidro ou gel) — avulso",
+              "description": "Estrutura completa em fibra ou gel com molde",
+              "icon": "✨",
+              "badge": "Avulso"
+            },
+            {
+              "id": "manutencao",
+              "label": "Manutenção periódica de alongamento — avulso",
+              "description": "Reposição de ponto de tensão e nivelamento",
+              "icon": "🔄",
+              "badge": "Avulso"
+            },
+            {
+              "id": "remocao",
+              "label": "Remoção de produto anterior / gel — adicional",
+              "description": "Retirada química ou mecânica segura",
+              "icon": "🧴",
+              "badge": "Adicional"
+            },
+            {
+              "id": "nail-art",
+              "label": "Nail art ou decoração elaborada — adicional",
+              "description": "Francesa reversa, encapsulada e desenhos manuais",
+              "icon": "🎨",
+              "badge": "Adicional"
+            },
+            {
+              "id": "combo-alongamento-arte",
+              "label": "Combo Alongamento + Nail Art — combo",
+              "description": "Pacote promocional com procedimento + decoração inclusa",
+              "icon": "📦",
+              "badge": "Combo"
+            },
+            {
+              "id": "outro",
+              "label": "Outro serviço personalizado — avulso",
+              "description": "Procedimento sob medida (ex.: spa dos pés, plástica)",
+              "icon": "🏷️",
+              "badge": "Personalizado"
             }
           ]
+        },
+        {
+          "type": "question",
+          "id": "outro-nome",
+          "label": "Qual é o nome do outro serviço que você oferece?",
+          "required": false,
+          "input": "text",
+          "placeholder": "Ex.: Spa dos pés, Plástica dos pés...",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "outro"
+          }
+        },
+        {
+          "type": "question",
+          "id": "objetivo-vida",
+          "label": "O que você mais quer conquistar com seu trabalho?",
+          "required": false,
+          "input": "choice",
+          "variant": "chips",
+          "helpText": "Opcional. Sua resposta ajuda a personalizar o plano; pode continuar sem responder.",
+          "options": [
+            {
+              "id": "renda",
+              "label": "Aumentar renda com estabilidade",
+              "icon": "💰"
+            },
+            {
+              "id": "tempo",
+              "label": "Mais tempo livre e descanso",
+              "icon": "⏱️"
+            },
+            {
+              "id": "espaco",
+              "label": "Montar meu espaço próprio",
+              "icon": "🏠"
+            },
+            {
+              "id": "especializar",
+              "label": "Me especializar e valorizar",
+              "icon": "🎓"
+            },
+            {
+              "id": "organizar",
+              "label": "Organização e menos estresse",
+              "icon": "🧘"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "horizonte-meta",
+          "label": "Em qual prazo você gostaria de avançar?",
+          "required": false,
+          "input": "choice",
+          "variant": "segmented",
+          "marginBottom": "relaxed",
+          "helpText": "Opcional. Sua resposta ajuda a personalizar o plano; pode continuar sem responder.",
+          "options": [
+            {
+              "id": "tres-meses",
+              "label": "Até 3 meses"
+            },
+            {
+              "id": "seis-meses",
+              "label": "Até 6 meses"
+            },
+            {
+              "id": "doze-meses",
+              "label": "1 ano"
+            },
+            {
+              "id": "sem-prazo",
+              "label": "Definindo"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "obstaculo-meta",
+          "label": "Qual é seu maior obstáculo hoje?",
+          "required": false,
+          "input": "choice",
+          "variant": "chips",
+          "marginBottom": "relaxed",
+          "helpText": "Opcional. Sua resposta ajuda a personalizar o plano; pode continuar sem responder.",
+          "options": [
+            {
+              "id": "clientes",
+              "label": "Poucas clientes",
+              "icon": "👥"
+            },
+            {
+              "id": "tempo",
+              "label": "Falta de tempo",
+              "icon": "⏳"
+            },
+            {
+              "id": "dinheiro",
+              "label": "Pouco capital",
+              "icon": "💵"
+            },
+            {
+              "id": "organizacao",
+              "label": "Desorganização",
+              "icon": "📁"
+            },
+            {
+              "id": "tecnica",
+              "label": "Insegurança técnica",
+              "icon": "🧪"
+            },
+            {
+              "id": "nao-sei",
+              "label": "Ainda não sei",
+              "icon": "❓"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "horas-desejadas",
+          "label": "Quantas horas por semana você gostaria de dedicar ao trabalho?",
+          "helpText": "Inclua atendimento, limpeza, organização e deslocamentos. Opcional; não substitui sua disponibilidade atual.",
+          "required": false,
+          "input": "number",
+          "unit": "horas/semana",
+          "min": 1,
+          "max": 168
         }
       ]
     },
     {
-      "id": "etapa-2",
-      "title": "Arte e Acabamento",
+      "id": "etapa-2-experiencia",
+      "title": "2. Experiência e Interesses",
+      "subtitle": "Autoavaliação de prática e interesses em técnicas avançadas",
       "blocks": [
         {
           "type": "text",
-          "text": "O acabamento e a nail art exigem tempo dedicado de mesa, habilidade técnica e materiais extras (géis paint, pós cromados, pedrarias e pincéis de precisão)."
+          "variant": "info",
+          "title": "Autoavaliação transparente",
+          "icon": "✨",
+          "marginBottom": "relaxed",
+          "text": "Indique seu nível de prática em cada técnica e se tem interesse em aprender ou aprimorar. Perfis são autoavaliações transparentes, não certificações técnicas."
         },
         {
           "type": "question",
-          "id": "acabamento",
-          "label": "Qual nível de acabamento artístico é realizado?",
+          "id": "exp-cuticula-russa",
+          "label": "Cutilagem russa / combinada (brocas e tesoura)",
           "required": true,
+          "input": "choice",
+          "variant": "chips",
           "options": [
             {
-              "id": "discreto",
-              "label": "Discreto e uniforme (cor única ou francesinha clássica)",
-              "values": {
-                "minutes": "0",
-                "materials": "0.00"
-              }
+              "id": "nunca",
+              "label": "Nunca aprendi",
+              "icon": "🌱"
             },
             {
-              "id": "simples",
-              "label": "Decoração comercial (filha única, degradê ou foil)",
-              "values": {
-                "minutes": "20",
-                "materials": "5.00"
-              }
+              "id": "aprendendo",
+              "label": "Estou aprendendo",
+              "icon": "📚"
             },
             {
-              "id": "elaborado",
-              "label": "Nail art elaborada (encapsulada, pedrarias ou desenho à mão livre)",
-              "values": {
-                "minutes": "40",
-                "materials": "12.00"
-              }
+              "id": "ajuda",
+              "label": "Realizo com ajuda ou insegurança",
+              "icon": "🤝"
+            },
+            {
+              "id": "autonomia",
+              "label": "Realizo com total autonomia",
+              "icon": "⭐"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "etapa-3",
-      "title": "Preparo e Remoção",
-      "blocks": [
-        {
-          "type": "text",
-          "text": "A remoção correta protege a lâmina ungueal, mas consome brocas diamantadas/cerâmica e tempo adicional de atendimento."
         },
         {
           "type": "question",
-          "id": "remocao",
-          "label": "Há remoção de produto anterior ou manutenção prévia?",
+          "id": "interesse-cuticula-russa",
+          "label": "Tem interesse em aprimorar cutilagem russa?",
           "required": true,
+          "input": "choice",
+          "variant": "segmented",
+          "marginBottom": "relaxed",
           "options": [
-            {
-              "id": "nao",
-              "label": "Unha limpa, pronta para o procedimento",
-              "values": {
-                "minutes": "0",
-                "materials": "0.00"
-              }
-            },
             {
               "id": "sim",
-              "label": "Necessita remoção química/mecânica de gel ou acrílico anterior",
-              "values": {
-                "minutes": "20",
-                "materials": "4.50"
-              }
+              "label": "Sim, quero dominar essa técnica",
+              "icon": "🚀"
+            },
+            {
+              "id": "nao",
+              "label": "Não é minha prioridade agora",
+              "icon": "⏸️"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "exp-gel",
+          "label": "Blindagem e nivelamento estruturado em gel",
+          "required": true,
+          "input": "choice",
+          "variant": "chips",
+          "options": [
+            {
+              "id": "nunca",
+              "label": "Nunca aprendi",
+              "icon": "🌱"
+            },
+            {
+              "id": "aprendendo",
+              "label": "Estou aprendendo",
+              "icon": "📚"
+            },
+            {
+              "id": "ajuda",
+              "label": "Realizo com ajuda ou insegurança",
+              "icon": "🤝"
+            },
+            {
+              "id": "autonomia",
+              "label": "Realizo com total autonomia",
+              "icon": "⭐"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "interesse-gel",
+          "label": "Tem interesse em aprender ou aprimorar blindagem e estrutura em gel?",
+          "required": true,
+          "input": "choice",
+          "variant": "segmented",
+          "marginBottom": "relaxed",
+          "options": [
+            {
+              "id": "sim",
+              "label": "Sim, quero aprender ou aperfeiçoar",
+              "icon": "🚀"
+            },
+            {
+              "id": "nao",
+              "label": "Não tenho interesse no momento",
+              "icon": "⏸️"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "exp-alongamento",
+          "label": "Alongamento completo (fibra de vidro ou moldes)",
+          "required": true,
+          "input": "choice",
+          "variant": "chips",
+          "options": [
+            {
+              "id": "nunca",
+              "label": "Nunca aprendi",
+              "icon": "🌱"
+            },
+            {
+              "id": "aprendendo",
+              "label": "Estou aprendendo",
+              "icon": "📚"
+            },
+            {
+              "id": "ajuda",
+              "label": "Realizo com ajuda ou insegurança",
+              "icon": "🤝"
+            },
+            {
+              "id": "autonomia",
+              "label": "Realizo com total autonomia",
+              "icon": "⭐"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "interesse-alongamento",
+          "label": "Tem interesse em capacitação para alongamentos estruturados?",
+          "required": true,
+          "input": "choice",
+          "variant": "segmented",
+          "marginBottom": "relaxed",
+          "options": [
+            {
+              "id": "sim",
+              "label": "Sim, pretendo me capacitar",
+              "icon": "🚀"
+            },
+            {
+              "id": "nao",
+              "label": "Não tenho interesse no momento",
+              "icon": "⏸️"
             }
           ]
         }
       ]
     },
     {
-      "id": "etapa-4",
-      "title": "Perfil e Posicionamento",
+      "id": "etapa-3-dados-servicos",
+      "title": "3. Dados dos Procedimentos e Combos",
       "blocks": [
         {
+          "type": "text",
+          "marginBottom": "relaxed",
+          "text": "Informe tempo, preço e custos individuais para cada serviço selecionado. O custo de materiais é o que se consome por aplicação (preparadores, gel, lixas), e NÃO o preço da embalagem cheia. A quantidade de serviços avulsos deve excluir atendimentos já computados em combos."
+        },
+        {
           "type": "question",
-          "id": "prioridade",
-          "label": "Qual é a principal expectativa da cliente no seu atendimento?",
+          "id": "tempo-tradicional",
+          "label": "Manicure Tradicional: Tempo médio de execução",
+          "helpText": "Duração média de mesa por cliente.",
           "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 300,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "tradicional"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-tradicional",
+          "label": "Manicure Tradicional: Preço cobrado por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "tradicional"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-tradicional",
+          "label": "Manicure Tradicional: Custo de materiais consumidos por atendimento (R$)",
+          "helpText": "Kit descartável, esmalte, algodão e acetona consumidos em 1 atendimento.",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "tradicional"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-tradicional",
+          "label": "Manicure Tradicional: Quantidade média de atendimentos avulsos por mês",
+          "helpText": "Exclua os atendimentos já inclusos em combos mensais.",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "tradicional"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-gel",
+          "label": "Esmaltação em Gel / Blindagem: Tempo médio de execução",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 300,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "gel"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-gel",
+          "label": "Esmaltação em Gel / Blindagem: Preço cobrado por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "gel"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-gel",
+          "label": "Esmaltação em Gel / Blindagem: Custo de materiais por atendimento (R$)",
+          "helpText": "Preparadores (desidratador, primer), gel base, esmalte em gel e top coat consumidos.",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "gel"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-gel",
+          "label": "Esmaltação em Gel / Blindagem: Quantidade média de atendimentos por mês",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "gel"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-alongamento",
+          "label": "Alongamento Completo: Tempo médio de execução",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 360,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "alongamento"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-alongamento",
+          "label": "Alongamento Completo: Preço cobrado por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "alongamento"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-alongamento",
+          "label": "Alongamento Completo: Custo de materiais por atendimento (R$)",
+          "helpText": "Fibra/gel construtor, preparadores, brocas desgastadas e finalizador.",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "alongamento"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-alongamento",
+          "label": "Alongamento Completo: Quantidade média de aplicações novas por mês",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "alongamento"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-manutencao",
+          "label": "Manutenção de Alongamento: Tempo médio de execução",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 300,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "manutencao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-manutencao",
+          "label": "Manutenção de Alongamento: Preço cobrado por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "manutencao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-manutencao",
+          "label": "Manutenção de Alongamento: Custo de materiais por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "manutencao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-manutencao",
+          "label": "Manutenção de Alongamento: Quantidade média por mês",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "manutencao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-remocao",
+          "label": "Remoção de Gel/Alongamento: Tempo médio de execução",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 180,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "remocao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-remocao",
+          "label": "Remoção: Preço cobrado por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "remocao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-remocao",
+          "label": "Remoção: Custo de materiais por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "remocao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-remocao",
+          "label": "Remoção: Quantidade média avulsa por mês",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "remocao"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-nail-art",
+          "label": "Nail Art / Decoração: Tempo médio adicional",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 180,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "nail-art"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-nail-art",
+          "label": "Nail Art: Preço cobrado (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "nail-art"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-nail-art",
+          "label": "Nail Art: Custo de materiais por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "nail-art"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-nail-art",
+          "label": "Nail Art: Quantidade média avulsa por mês",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "nail-art"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-combo",
+          "label": "Combo Alongamento + Nail Art: Duração total de mesa",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 420,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "combo-alongamento-arte"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-combo",
+          "label": "Combo Alongamento + Nail Art: Preço total do combo (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "combo-alongamento-arte"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-combo",
+          "label": "Combo Alongamento + Nail Art: Custo total de materiais do combo (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "combo-alongamento-arte"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-combo",
+          "label": "Combo Alongamento + Nail Art: Quantidade média de combos por mês",
+          "required": true,
+          "input": "number",
+          "unit": "combos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "combo-alongamento-arte"
+          }
+        },
+        {
+          "type": "question",
+          "id": "tempo-outro",
+          "label": "Outro Procedimento: Tempo médio de execução",
+          "required": true,
+          "input": "number",
+          "unit": "minutos",
+          "min": 1,
+          "max": 360,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "outro"
+          }
+        },
+        {
+          "type": "question",
+          "id": "preco-outro",
+          "label": "Outro Procedimento: Preço cobrado por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "outro"
+          }
+        },
+        {
+          "type": "question",
+          "id": "material-outro",
+          "label": "Outro Procedimento: Custo de materiais por atendimento (R$)",
+          "required": true,
+          "input": "money",
+          "condition": {
+            "questionId": "servicos",
+            "includes": "outro"
+          }
+        },
+        {
+          "type": "question",
+          "id": "qtd-outro",
+          "label": "Outro Procedimento: Quantidade média por mês",
+          "required": true,
+          "input": "number",
+          "unit": "atendimentos/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "servicos",
+            "includes": "outro"
+          }
+        }
+      ]
+    },
+    {
+      "id": "etapa-4-capacidade",
+      "title": "4. Local e Capacidade de Atendimento",
+      "subtitle": "Ambiente de trabalho, rotina e horas disponíveis na agenda",
+      "badge": "Capacidade",
+      "blocks": [
+        {
+          "type": "text",
+          "variant": "info",
+          "title": "Cálculo de capacidade líquida",
+          "icon": "⏱️",
+          "text": "Sua capacidade líquida de atendimento considera os dias e horas disponíveis menos o tempo de apoio (preparação, assepsia e administração)."
+        },
+        {
+          "type": "question",
+          "id": "modalidade-espaco",
+          "label": "Onde você realiza seus atendimentos principais?",
+          "required": true,
+          "input": "choice",
+          "variant": "cards",
+          "columns": "2",
+          "options": [
+            {
+              "id": "proprio",
+              "label": "Espaço comercial próprio ou alugado",
+              "description": "Ponto de atendimento comercial exclusivo",
+              "icon": "🏢"
+            },
+            {
+              "id": "residencia",
+              "label": "Home Studio (em residência)",
+              "description": "Atendimento em ambiente adaptado em casa",
+              "icon": "🏠"
+            },
+            {
+              "id": "compartilhado",
+              "label": "Salão parceiro ou coworking",
+              "description": "Sublocação de mesa ou comissão por atendimento",
+              "icon": "🤝"
+            },
+            {
+              "id": "domicilio",
+              "label": "Atendimento em domicílio",
+              "description": "Deslocamento até a residência da cliente",
+              "icon": "🚗"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "dias-semana",
+          "label": "Dias por semana para trabalhar",
+          "required": true,
+          "input": "number",
+          "unit": "dias/semana",
+          "group": "rotina",
+          "groupTitle": "Jornada de Atendimento e Rotina",
+          "groupIcon": "📅",
+          "groupBadge": "Semanal",
+          "min": 1,
+          "max": 7
+        },
+        {
+          "type": "question",
+          "id": "horas-dia",
+          "label": "Horas totais de trabalho por dia",
+          "required": true,
+          "input": "number",
+          "unit": "horas/dia",
+          "group": "rotina",
+          "groupTitle": "Jornada de Atendimento e Rotina",
+          "groupIcon": "📅",
+          "groupBadge": "Semanal",
+          "min": 1,
+          "max": 16
+        },
+        {
+          "type": "question",
+          "id": "horas-apoio",
+          "label": "Horas semanais de apoio e higienização",
+          "helpText": "Autoclave, preparação de kits descartáveis, compras e organização.",
+          "required": true,
+          "input": "number",
+          "unit": "horas/semana",
+          "group": "rotina",
+          "groupTitle": "Jornada de Atendimento e Rotina",
+          "groupIcon": "📅",
+          "groupBadge": "Semanal",
+          "min": 0,
+          "max": 50
+        }
+      ]
+    },
+    {
+      "id": "etapa-5-despesas",
+      "title": "5. Despesas Fixas e Profissionais",
+      "subtitle": "Estrutura de despesas mensais, parcela profissional e remuneração",
+      "badge": "Custos Fixos",
+      "blocks": [
+        {
+          "type": "text",
+          "variant": "info",
+          "title": "Despesas Profissionais e Pessoais",
+          "icon": "📊",
+          "text": "Informe os valores pagos por mês em reais. Para despesas compartilhadas entre trabalho e residência (ex.: energia, internet ou espaço), informe o gasto total e, opcionalmente, quanto desse valor você estima que corresponde ao trabalho. Se preferir, pode deixar em branco."
+        },
+        {
+          "type": "question",
+          "id": "despesa-espaco",
+          "label": "Aluguel, condomínio ou sublocação do espaço (R$/mês)",
+          "helpText": "Gasto total pago no mês. Se for espaço próprio sem custo adicional, informe 0,00.",
+          "required": true,
+          "input": "money",
+          "group": "espaco",
+          "groupTitle": "Espaço Físico e Contas Básicas",
+          "groupIcon": "🏢",
+          "groupBadge": "Infraestrutura"
+        },
+        {
+          "type": "question",
+          "id": "despesa-espaco-trabalho",
+          "label": "Quanto desse valor você estima que corresponde ao trabalho? (R$/mês)",
+          "helpText": "Opcional. Se o espaço for exclusivo do trabalho, deixe em branco. Se divide com a residência, informe uma estimativa em reais da parte do trabalho.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "espaco",
+          "groupTitle": "Espaço Físico e Contas Básicas",
+          "groupIcon": "🏢",
+          "groupBadge": "Infraestrutura"
+        },
+        {
+          "type": "question",
+          "id": "despesa-energia-contas",
+          "label": "Energia elétrica, água, internet e telefone (R$/mês)",
+          "helpText": "Gasto total pago no mês.",
+          "required": true,
+          "input": "money",
+          "group": "espaco",
+          "groupTitle": "Espaço Físico e Contas Básicas",
+          "groupIcon": "🏢",
+          "groupBadge": "Infraestrutura"
+        },
+        {
+          "type": "question",
+          "id": "despesa-contas-trabalho",
+          "label": "Quanto desse valor você estima que corresponde ao trabalho? (R$/mês)",
+          "helpText": "Opcional. Se as contas forem exclusivas do trabalho, deixe em branco. Se divide com a casa, informe uma estimativa em reais da parte do trabalho.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "espaco",
+          "groupTitle": "Espaço Físico e Contas Básicas",
+          "groupIcon": "🏢",
+          "groupBadge": "Infraestrutura"
+        },
+        {
+          "type": "question",
+          "id": "despesa-descartaveis-limpeza",
+          "label": "Produtos de higienização, esterilização e descartáveis gerais (R$/mês)",
+          "required": true,
+          "input": "money",
+          "group": "operacao",
+          "groupTitle": "Biossegurança e Equipamentos",
+          "groupIcon": "🧴",
+          "groupBadge": "Operação"
+        },
+        {
+          "type": "question",
+          "id": "despesa-equipamentos",
+          "label": "Reserva mensal para manutenção e reposição de equipamentos (R$/mês)",
+          "required": true,
+          "input": "money",
+          "group": "operacao",
+          "groupTitle": "Biossegurança e Equipamentos",
+          "groupIcon": "🧴",
+          "groupBadge": "Operação"
+        },
+        {
+          "type": "question",
+          "id": "despesa-transporte",
+          "label": "Transporte, combustível ou deslocamento a trabalho (R$/mês)",
+          "helpText": "Gasto total com deslocamento no mês.",
+          "required": true,
+          "input": "money",
+          "group": "sistemas",
+          "groupTitle": "Transporte, Meios de Pagamento e Sistemas",
+          "groupIcon": "💳",
+          "groupBadge": "Gestão"
+        },
+        {
+          "type": "question",
+          "id": "despesa-transporte-trabalho",
+          "label": "Quanto desse valor você estima que corresponde ao trabalho? (R$/mês)",
+          "helpText": "Opcional. Se o transporte for exclusivo a trabalho, deixe em branco. Se divide com uso pessoal/familiar, informe uma estimativa em reais da parte do trabalho.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "sistemas",
+          "groupTitle": "Transporte, Meios de Pagamento e Sistemas",
+          "groupIcon": "💳",
+          "groupBadge": "Gestão"
+        },
+        {
+          "type": "question",
+          "id": "despesa-sistemas-mei",
+          "label": "DAS-MEI, contador, app de agendamento e outros sistemas (R$/mês)",
+          "required": true,
+          "input": "money",
+          "group": "sistemas",
+          "groupTitle": "Transporte, Meios de Pagamento e Sistemas",
+          "groupIcon": "💳",
+          "groupBadge": "Gestão"
+        },
+        {
+          "type": "question",
+          "id": "taxa-cartao",
+          "label": "Valor efetivamente pago em taxas de maquininha, cartão e parcelamento no mês (R$/mês)",
+          "helpText": "Informe o valor em reais pago no mês. Se não paga taxas ou não aceita cartão, informe 0,00. Se não souber, informe 'não sei' ou deixe em branco.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "sistemas",
+          "groupTitle": "Transporte, Meios de Pagamento e Sistemas",
+          "groupIcon": "💳",
+          "groupBadge": "Gestão"
+        },
+        {
+          "type": "question",
+          "id": "retirada-atual",
+          "label": "Quanto você retira atualmente do negócio para você por mês (pró-labore em R$)?",
+          "helpText": "Valor líquido retirado mensalmente para suas despesas pessoais.",
+          "required": true,
+          "input": "money",
+          "group": "prolabore",
+          "groupTitle": "Pró-Labore e Metas Pessoais",
+          "groupIcon": "💰",
+          "groupBadge": "Remuneração"
+        },
+        {
+          "type": "question",
+          "id": "retirada-desejada",
+          "label": "Qual é a sua meta de remuneração mensal pretendida (R$)?",
+          "required": true,
+          "input": "money",
+          "group": "prolabore",
+          "groupTitle": "Pró-Labore e Metas Pessoais",
+          "groupIcon": "💰",
+          "groupBadge": "Remuneração"
+        }
+      ]
+    },
+    {
+      "id": "etapa-6-pessoal",
+      "title": "6. Finanças Pessoais (Opcional)",
+      "subtitle": "Análise de orçamento familiar e separação de contas PF vs PJ",
+      "badge": "Opcional",
+      "blocks": [
+        {
+          "type": "text",
+          "variant": "info",
+          "title": "Equilíbrio entre empresa e família",
+          "icon": "⚖️",
+          "text": "Aprofundamento opcional para comparar sua retirada atual com a necessidade real do seu lar. Nenhum dado bancário, documento ou nome de familiares é solicitado."
+        },
+        {
+          "type": "question",
+          "id": "preencher-pessoal",
+          "label": "Deseja detalhar suas necessidades de orçamento familiar?",
+          "required": true,
+          "input": "choice",
+          "variant": "segmented",
+          "options": [
+            {
+              "id": "sim",
+              "label": "Sim, preencher orçamento",
+              "icon": "📝"
+            },
+            {
+              "id": "pular",
+              "label": "Pular esta etapa",
+              "icon": "⏩"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "pessoal-moradia",
+          "label": "Moradia pessoal (aluguel, condomínio, IPTU residencial) — R$/mês",
+          "required": false,
+          "input": "money",
+          "group": "orcamento",
+          "groupTitle": "Despesas do Orçamento Familiar",
+          "groupIcon": "🏡",
+          "groupBadge": "Pessoal",
+          "condition": {
+            "questionId": "preencher-pessoal",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "pessoal-alimentacao",
+          "label": "Alimentação e supermercado básico da casa — R$/mês",
+          "required": false,
+          "input": "money",
+          "group": "orcamento",
+          "groupTitle": "Despesas do Orçamento Familiar",
+          "groupIcon": "🏡",
+          "groupBadge": "Pessoal",
+          "condition": {
+            "questionId": "preencher-pessoal",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "pessoal-contas",
+          "label": "Contas da casa (energia, água, internet residencial não rateadas) — R$/mês",
+          "required": false,
+          "input": "money",
+          "group": "orcamento",
+          "groupTitle": "Despesas do Orçamento Familiar",
+          "groupIcon": "🏡",
+          "groupBadge": "Pessoal",
+          "condition": {
+            "questionId": "preencher-pessoal",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "pessoal-transporte",
+          "label": "Transporte pessoal particular da família — R$/mês",
+          "required": false,
+          "input": "money",
+          "group": "orcamento",
+          "groupTitle": "Despesas do Orçamento Familiar",
+          "groupIcon": "🏡",
+          "groupBadge": "Pessoal",
+          "condition": {
+            "questionId": "preencher-pessoal",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "pessoal-dependentes",
+          "label": "Dependentes, saúde e educação familiar — R$/mês",
+          "required": false,
+          "input": "money",
+          "group": "orcamento",
+          "groupTitle": "Despesas do Orçamento Familiar",
+          "groupIcon": "🏡",
+          "groupBadge": "Pessoal",
+          "condition": {
+            "questionId": "preencher-pessoal",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "pessoal-outras-rendas",
+          "label": "Outras fontes de renda da casa que ajudam nessas contas — R$/mês",
+          "helpText": "Renda do cônjuge, pensão ou outros trabalhos.",
+          "required": false,
+          "input": "money",
+          "group": "orcamento",
+          "groupTitle": "Despesas do Orçamento Familiar",
+          "groupIcon": "🏡",
+          "groupBadge": "Pessoal",
+          "condition": {
+            "questionId": "preencher-pessoal",
+            "equals": "sim"
+          }
+        }
+      ]
+    },
+    {
+      "id": "etapa-7-marketing",
+      "title": "7. Divulgação e Aquisição de Clientes",
+      "subtitle": "Canais de divulgação, atração e investimento mensal",
+      "badge": "Captação",
+      "blocks": [
+        {
+          "type": "text",
+          "variant": "info",
+          "title": "Aquisição de Clientes",
+          "icon": "📢",
+          "text": "Identifique seus canais de atração e os gastos mensais dedicados a divulgação. Centralizamos esses valores para não duplicá-los nas despesas fixas."
+        },
+        {
+          "type": "question",
+          "id": "canais-mkt",
+          "label": "Quais canais você utiliza para captar novas clientes?",
+          "required": true,
+          "input": "multi-choice",
+          "variant": "cards",
+          "columns": "2",
+          "options": [
+            {
+              "id": "instagram",
+              "label": "Instagram (postagens, reels e stories)",
+              "icon": "📸",
+              "description": "Conteúdo orgânico na rede social"
+            },
+            {
+              "id": "trafego",
+              "label": "Anúncios pagos (Meta Ads / Instagram turbinar)",
+              "icon": "📢",
+              "description": "Investimento mensal em tráfego pago"
+            },
+            {
+              "id": "whatsapp",
+              "label": "WhatsApp / Lista de transmissão e status",
+              "icon": "💬",
+              "description": "Contato direto e avisos de agenda"
+            },
+            {
+              "id": "indicacao",
+              "label": "Indicação direta / Programa de fidelidade boca a boca",
+              "icon": "🗣️",
+              "description": "Recomendações espontâneas de clientes"
+            },
+            {
+              "id": "parcerias",
+              "label": "Parcerias locais (cabeleireiros, estéticas, comércio vizinho)",
+              "icon": "🤝",
+              "description": "Indicações cruzadas no comércio da região"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "gasto-anuncios",
+          "label": "Quanto você investe por mês em anúncios pagos (R$)?",
+          "required": false,
+          "input": "money",
+          "condition": {
+            "questionId": "canais-mkt",
+            "includes": "trafego"
+          }
+        },
+        {
+          "type": "question",
+          "id": "novas-clientes-anuncios",
+          "label": "Quantas novas clientes chegam por mês através de anúncios (estimativa)?",
+          "required": false,
+          "input": "number",
+          "unit": "clientes/mês",
+          "min": 0,
+          "condition": {
+            "questionId": "canais-mkt",
+            "includes": "trafego"
+          }
+        },
+        {
+          "type": "question",
+          "id": "publico-necessidade",
+          "label": "O que suas clientes mais valorizam ao escolher você?",
+          "required": false,
+          "input": "choice",
+          "variant": "chips",
+          "helpText": "Opcional. Sua resposta ajuda a personalizar o plano; pode continuar sem responder.",
           "options": [
             {
               "id": "praticidade",
-              "label": "Agilidade e durabilidade para a rotina"
+              "label": "Praticidade e horários",
+              "icon": "⏰"
             },
             {
-              "id": "equilibrio",
-              "label": "Elegância e durabilidade equilibradas"
+              "id": "durabilidade",
+              "label": "Durabilidade e confiança",
+              "icon": "💎"
             },
             {
-              "id": "marcante",
-              "label": "Exclusividade e impacto visual diferenciado"
+              "id": "arte",
+              "label": "Nail art e personalização",
+              "icon": "🎨"
+            },
+            {
+              "id": "preco",
+              "label": "Preço acessível",
+              "icon": "🏷️"
+            },
+            {
+              "id": "nao-sei",
+              "label": "Ainda não sei",
+              "icon": "❓"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "etapa-5",
-      "title": "Tempo de Mesa Planejado",
-      "blocks": [
-        {
-          "type": "question",
-          "id": "disponibilidade",
-          "label": "Qual o tempo máximo de mesa reservado na sua agenda para esse atendimento?",
-          "required": true,
-          "options": [
-            {
-              "id": "60",
-              "label": "Até 60 minutos (1 hora)",
-              "values": {
-                "minutes": "60"
-              }
-            },
-            {
-              "id": "120",
-              "label": "Até 120 minutos (2 horas)",
-              "values": {
-                "minutes": "120"
-              }
-            },
-            {
-              "id": "180",
-              "label": "Até 180 minutos (3 horas)",
-              "values": {
-                "minutes": "180"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "etapa-6",
-      "title": "Seu Preço Atual de Atendimento",
-      "blocks": [
-        {
-          "type": "text",
-          "text": "Informe o preço exato que você cobra. A comparação usa custos e duração fictícios de referência, não os seus custos individuais."
         },
         {
           "type": "question",
-          "id": "preco-praticado",
-          "label": "Quanto você cobra por esse atendimento (R$)?",
+          "id": "publico-obstaculo",
+          "label": "Qual objeção você mais ouve antes de fechar um atendimento?",
+          "required": false,
+          "input": "choice",
+          "variant": "chips",
+          "helpText": "Opcional. Sua resposta ajuda a personalizar o plano; pode continuar sem responder.",
+          "options": [
+            {
+              "id": "preco",
+              "label": "Preço acima do orçamento",
+              "icon": "💵"
+            },
+            {
+              "id": "horario",
+              "label": "Horário incompatível",
+              "icon": "📅"
+            },
+            {
+              "id": "confianca",
+              "label": "Quer conhecer melhor o trabalho",
+              "icon": "🔍"
+            },
+            {
+              "id": "nenhuma",
+              "label": "Sem objeção recorrente",
+              "icon": "👍"
+            },
+            {
+              "id": "nao-sei",
+              "label": "Ainda não sei",
+              "icon": "❓"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "publico-retorno",
+          "label": "Como costuma ser o retorno das suas clientes?",
+          "required": false,
+          "input": "choice",
+          "variant": "chips",
+          "helpText": "Opcional. Sua resposta ajuda a personalizar o plano; pode continuar sem responder.",
+          "options": [
+            {
+              "id": "frequente",
+              "label": "Retornam regularmente todo mês",
+              "icon": "🔁"
+            },
+            {
+              "id": "ocasional",
+              "label": "Apenas em ocasiões específicas",
+              "icon": "🎉"
+            },
+            {
+              "id": "baixo",
+              "label": "Poucas voltam após a primeira vez",
+              "icon": "📉"
+            },
+            {
+              "id": "nao-sei",
+              "label": "Ainda não acompanho esse dado",
+              "icon": "❓"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etapa-8-reservas",
+      "title": "8. Reservas, Caixa e Compromissos (Opcional)",
+      "subtitle": "Diagnóstico de colchão financeiro e passivos operacionais",
+      "badge": "Opcional",
+      "blocks": [
+        {
+          "type": "text",
+          "variant": "info",
+          "title": "Segurança Financeira",
+          "icon": "🛡️",
+          "text": "Diagnóstico de colchão financeiro e compromissos ativos. Não solicitamos dados de cartão, números de conta ou credenciais bancárias."
+        },
+        {
+          "type": "question",
+          "id": "preencher-reservas",
+          "label": "Deseja registrar o quadro de reservas e dívidas ativas?",
           "required": true,
-          "input": "money"
+          "input": "choice",
+          "variant": "segmented",
+          "options": [
+            {
+              "id": "sim",
+              "label": "Sim, preencher reservas",
+              "icon": "📝"
+            },
+            {
+              "id": "pular",
+              "label": "Pular esta etapa",
+              "icon": "⏩"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "caixa-empresa",
+          "label": "Caixa de giro disponível da sua empresa (R$)",
+          "helpText": "Saldo em conta jurídica ou reservado para despesas do negócio.",
+          "required": false,
+          "input": "money",
+          "group": "reservas-dividas",
+          "groupTitle": "Quadro de Reservas e Dívidas",
+          "groupIcon": "🛡️",
+          "condition": {
+            "questionId": "preencher-reservas",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "reserva-pessoal",
+          "label": "Reserva de emergência pessoal (R$)",
+          "required": false,
+          "input": "money",
+          "group": "reservas-dividas",
+          "groupTitle": "Quadro de Reservas e Dívidas",
+          "groupIcon": "🛡️",
+          "condition": {
+            "questionId": "preencher-reservas",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "divida-mensal",
+          "label": "Total de parcelas mensais de financiamentos/empréstimos ativos (R$/mês)",
+          "required": false,
+          "input": "money",
+          "group": "reservas-dividas",
+          "groupTitle": "Quadro de Reservas e Dívidas",
+          "groupIcon": "🛡️",
+          "condition": {
+            "questionId": "preencher-reservas",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "divida-total",
+          "label": "Saldo total devedor aproximado (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "placeholder": "Ex.: 5000,00",
+          "group": "reservas-dividas",
+          "groupTitle": "Quadro de Reservas e Dívidas",
+          "groupIcon": "🛡️",
+          "condition": {
+            "questionId": "preencher-reservas",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "divida-atraso",
+          "label": "Você possui parcelas de empréstimos, cartão de crédito ou contas em atraso?",
+          "helpText": "Importante: juros moratórios e cartão rotativo corroem margens rapidamente. Identificar atrasos permite priorizar renegociações emergenciais antes de formar reservas.",
+          "required": false,
+          "input": "choice",
+          "variant": "segmented",
+          "options": [
+            {
+              "id": "sim",
+              "label": "Sim, tenho parcelas/contas em atraso",
+              "icon": "⚠️"
+            },
+            {
+              "id": "nao",
+              "label": "Não, todos os pagamentos em dia",
+              "icon": "✅"
+            },
+            {
+              "id": "sem-dividas",
+              "label": "Não possuo dívidas",
+              "icon": "🛡️"
+            }
+          ],
+          "group": "reservas-dividas",
+          "groupTitle": "Quadro de Reservas e Dívidas",
+          "groupIcon": "🛡️",
+          "condition": {
+            "questionId": "preencher-reservas",
+            "equals": "sim"
+          }
+        },
+        {
+          "type": "question",
+          "id": "divida-atraso-valor",
+          "label": "Valor aproximado atualmente em atraso (R$)",
+          "helpText": "Soma das parcelas ou contas vencidas que estão acumulando juros.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "placeholder": "Ex.: 600,00",
+          "group": "reservas-dividas",
+          "groupTitle": "Quadro de Reservas e Dívidas",
+          "groupIcon": "🛡️",
+          "condition": {
+            "questionId": "divida-atraso",
+            "equals": "sim"
+          }
+        }
+      ]
+    },
+    {
+      "id": "etapa-9-historico",
+      "title": "9. Histórico Recente (Opcional)",
+      "subtitle": "Variação mensal de atendimentos e sazonalidade",
+      "badge": "Opcional",
+      "blocks": [
+        {
+          "type": "text",
+          "variant": "info",
+          "title": "Fluxo Real vs. Estimado e Tendência",
+          "icon": "📈",
+          "text": "Comparação entre sua estimativa de rotina e o fluxo real realizado. Você pode registrar apenas o mês anterior ou até 3 meses para observar a estabilidade ou tendência do negócio. Preencha apenas o que souber."
+        },
+        {
+          "type": "question",
+          "id": "preencher-historico",
+          "label": "Deseja registrar dados dos últimos meses para comparar com a rotina estimada?",
+          "helpText": "Opcional. Registrar múltiplos meses permite avaliar se seu faturamento está crescendo, estável ou em queda, além de comparar com a rotina simulada.",
+          "required": true,
+          "input": "choice",
+          "variant": "segmented",
+          "options": [
+            {
+              "id": "3-meses",
+              "label": "Últimos 3 meses (ver tendência)",
+              "icon": "📈"
+            },
+            {
+              "id": "sim",
+              "label": "Apenas o mês anterior (1 mês)",
+              "icon": "📅"
+            },
+            {
+              "id": "pular",
+              "label": "Pular e ir para diagnóstico",
+              "icon": "⏩"
+            }
+          ]
+        },
+        {
+          "type": "question",
+          "id": "hist-faturamento-m1",
+          "label": "Mês anterior: Faturamento bruto total recebido (R$)",
+          "helpText": "Soma de todo o dinheiro que entrou de atendimentos no mês mais recente.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m1",
+          "groupTitle": "Realizado no Mês Anterior (Mais Recente)",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "notEquals": "pular"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-despesas-m1",
+          "label": "Mês anterior: Total de despesas pagas no mês (R$)",
+          "helpText": "Materiais, contas, aluguel, transporte e despesas do negócio.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m1",
+          "groupTitle": "Realizado no Mês Anterior (Mais Recente)",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "notEquals": "pular"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-retiradas-m1",
+          "label": "Mês anterior: Retiradas pessoais efetuadas (R$)",
+          "helpText": "Valor que você retirou do negócio para suas contas particulares.",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m1",
+          "groupTitle": "Realizado no Mês Anterior (Mais Recente)",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "notEquals": "pular"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-faturamento-m2",
+          "label": "2 meses atrás: Faturamento bruto total recebido (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m2",
+          "groupTitle": "Realizado há 2 Meses",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "equals": "3-meses"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-despesas-m2",
+          "label": "2 meses atrás: Total de despesas pagas no mês (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m2",
+          "groupTitle": "Realizado há 2 Meses",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "equals": "3-meses"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-retiradas-m2",
+          "label": "2 meses atrás: Retiradas pessoais efetuadas (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m2",
+          "groupTitle": "Realizado há 2 Meses",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "equals": "3-meses"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-faturamento-m3",
+          "label": "3 meses atrás: Faturamento bruto total recebido (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m3",
+          "groupTitle": "Realizado há 3 Meses",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "equals": "3-meses"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-despesas-m3",
+          "label": "3 meses atrás: Total de despesas pagas no mês (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m3",
+          "groupTitle": "Realizado há 3 Meses",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "equals": "3-meses"
+          }
+        },
+        {
+          "type": "question",
+          "id": "hist-retiradas-m3",
+          "label": "3 meses atrás: Retiradas pessoais efetuadas (R$)",
+          "required": false,
+          "input": "money",
+          "allowUnknown": true,
+          "group": "historico-m3",
+          "groupTitle": "Realizado há 3 Meses",
+          "groupIcon": "📅",
+          "condition": {
+            "questionId": "preencher-historico",
+            "equals": "3-meses"
+          }
         }
       ]
     }
   ],
   "result": {
-    "kind": "pricing-v1",
-    "contributionQuestions": [
-      "servico",
-      "acabamento",
-      "remocao"
+    "kind": "business-diagnosis-v1",
+    "servicesQuestion": "servicos",
+    "customServiceNameQuestion": "outro-nome",
+    "services": [
+      {
+        "id": "tradicional",
+        "label": "Manicure tradicional (cutilagem e esmaltação comum)",
+        "category": "avulso",
+        "timeQuestion": "tempo-tradicional",
+        "priceQuestion": "preco-tradicional",
+        "materialsQuestion": "material-tradicional",
+        "quantityQuestion": "qtd-tradicional"
+      },
+      {
+        "id": "gel",
+        "label": "Esmaltação em gel ou blindagem estruturada",
+        "category": "avulso",
+        "timeQuestion": "tempo-gel",
+        "priceQuestion": "preco-gel",
+        "materialsQuestion": "material-gel",
+        "quantityQuestion": "qtd-gel"
+      },
+      {
+        "id": "alongamento",
+        "label": "Alongamento completo (fibra de vidro ou gel)",
+        "category": "avulso",
+        "timeQuestion": "tempo-alongamento",
+        "priceQuestion": "preco-alongamento",
+        "materialsQuestion": "material-alongamento",
+        "quantityQuestion": "qtd-alongamento"
+      },
+      {
+        "id": "manutencao",
+        "label": "Manutenção periódica de alongamento",
+        "category": "avulso",
+        "timeQuestion": "tempo-manutencao",
+        "priceQuestion": "preco-manutencao",
+        "materialsQuestion": "material-manutencao",
+        "quantityQuestion": "qtd-manutencao"
+      },
+      {
+        "id": "remocao",
+        "label": "Remoção de produto anterior / gel",
+        "category": "adicional",
+        "timeQuestion": "tempo-remocao",
+        "priceQuestion": "preco-remocao",
+        "materialsQuestion": "material-remocao",
+        "quantityQuestion": "qtd-remocao"
+      },
+      {
+        "id": "nail-art",
+        "label": "Nail art ou decoração elaborada",
+        "category": "adicional",
+        "timeQuestion": "tempo-nail-art",
+        "priceQuestion": "preco-nail-art",
+        "materialsQuestion": "material-nail-art",
+        "quantityQuestion": "qtd-nail-art"
+      },
+      {
+        "id": "combo-alongamento-arte",
+        "label": "Combo Alongamento + Nail Art",
+        "category": "combo",
+        "timeQuestion": "tempo-combo",
+        "priceQuestion": "preco-combo",
+        "materialsQuestion": "material-combo",
+        "quantityQuestion": "qtd-combo",
+        "includedServices": [
+          "alongamento",
+          "nail-art"
+        ]
+      },
+      {
+        "id": "outro",
+        "label": "Outro serviço personalizado",
+        "category": "avulso",
+        "timeQuestion": "tempo-outro",
+        "priceQuestion": "preco-outro",
+        "materialsQuestion": "material-outro",
+        "quantityQuestion": "qtd-outro"
+      }
     ],
-    "durationKey": "minutes",
-    "materialsKey": "materials",
-    "availabilityQuestion": "disponibilidade",
-    "availabilityKey": "minutes",
-    "actualPriceQuestion": "preco-praticado",
-    "profileQuestion": "acabamento",
-    "profiles": {
-      "discreto": {
-        "label": "Minimalista Elegante",
-        "description": "Foco em linhas puras, precisão milimétrica de cutilagem e acabamento delicado e refinado."
+    "capacity": {
+      "daysPerWeekQuestion": "dias-semana",
+      "hoursPerDayQuestion": "horas-dia",
+      "supportHoursQuestion": "horas-apoio",
+      "supportHoursPeriod": "week",
+      "spaceTypeQuestion": "modalidade-espaco"
+    },
+    "expenses": [
+      {
+        "id": "espaco",
+        "label": "Aluguel e taxas de espaço",
+        "category": "Espaço de trabalho",
+        "amountQuestion": "despesa-espaco",
+        "workAmountQuestion": "despesa-espaco-trabalho",
+        "period": "month"
       },
-      "simples": {
-        "label": "Criativa Versátil",
-        "description": "Harmonia entre arte comercial e rapidez de execução, excelente para fidelização semanal."
+      {
+        "id": "energia-contas",
+        "label": "Energia, água, internet e telefone",
+        "category": "Utilidades operacionais",
+        "amountQuestion": "despesa-energia-contas",
+        "workAmountQuestion": "despesa-contas-trabalho",
+        "period": "month"
       },
-      "elaborado": {
-        "label": "Nail Artist Exclusiva",
-        "description": "Atendimento premium com alto nível técnico, estruturação avançada e valor agregado superior."
+      {
+        "id": "descartaveis-limpeza",
+        "label": "Descartáveis gerais, assepsia e limpeza",
+        "category": "Higiene e biossegurança",
+        "amountQuestion": "despesa-descartaveis-limpeza",
+        "period": "month"
+      },
+      {
+        "id": "equipamentos",
+        "label": "Reserva de manutenção e reposição de equipamentos",
+        "category": "Equipamentos",
+        "amountQuestion": "despesa-equipamentos",
+        "period": "month"
+      },
+      {
+        "id": "transporte",
+        "label": "Transporte e deslocamento a trabalho",
+        "category": "Deslocamento",
+        "amountQuestion": "despesa-transporte",
+        "workAmountQuestion": "despesa-transporte-trabalho",
+        "period": "month"
+      },
+      {
+        "id": "sistemas-mei",
+        "label": "DAS-MEI, sistemas de agendamento e taxas legais",
+        "category": "Sistemas e legalização",
+        "amountQuestion": "despesa-sistemas-mei",
+        "period": "month"
+      }
+    ],
+    "feeAmountQuestion": "taxa-cartao",
+    "defaultFeeRate": "0.05",
+    "targetMargins": [
+      "0.15",
+      "0.20",
+      "0.25"
+    ],
+    "remunerationQuestion": "retirada-atual",
+    "targetRemunerationQuestion": "retirada-desejada",
+    "marketing": {
+      "channelsQuestion": "canais-mkt",
+      "channelExpenses": {
+        "trafego": "gasto-anuncios"
+      },
+      "channelClients": {
+        "trafego": "novas-clientes-anuncios"
       }
     },
-    "priorityQuestion": "prioridade",
-    "priorityTexts": {
-      "praticidade": "Sua cliente busca máxima durabilidade e agilidade. Garanta preparadores eficientes para evitar descolamentos precoces.",
-      "equilibrio": "A cliente equilibra estética e funcionalidade. Ofereça opções de manutenção preventiva a cada 20 dias.",
-      "marcante": "A cliente deseja unhas que chamem atenção. Destaque a qualidade dos produtos usados e reserve tempo sem pressa para fotos de portfólio."
+    "personalFinances": {
+      "optInQuestion": "preencher-pessoal",
+      "housingQuestion": "pessoal-moradia",
+      "foodQuestion": "pessoal-alimentacao",
+      "utilitiesQuestion": "pessoal-contas",
+      "transportQuestion": "pessoal-transporte",
+      "dependentsQuestion": "pessoal-dependentes",
+      "otherIncomeQuestion": "pessoal-outras-rendas"
     },
-    "scenario": {
-      "currency": "BRL",
-      "operatingHourly": "12.00",
-      "compensationHourly": "24.00",
-      "feeRate": "0.05",
-      "targetMargins": [
-        "0.00",
-        "0.15",
-        "0.25"
+    "reservesAndDebts": {
+      "optInQuestion": "preencher-reservas",
+      "businessCashQuestion": "caixa-empresa",
+      "personalReserveQuestion": "reserva-pessoal",
+      "monthlyDebtQuestion": "divida-mensal",
+      "totalDebtQuestion": "divida-total",
+      "overdueDebtQuestion": "divida-atraso",
+      "overdueDebtAmountQuestion": "divida-atraso-valor"
+    },
+    "monthlyHistory": {
+      "optInQuestion": "preencher-historico",
+      "months": [
+        {
+          "monthKey": "m3",
+          "label": "3 meses atrás",
+          "revenueQuestion": "hist-faturamento-m3",
+          "expensesQuestion": "hist-despesas-m3",
+          "withdrawalsQuestion": "hist-retiradas-m3"
+        },
+        {
+          "monthKey": "m2",
+          "label": "2 meses atrás",
+          "revenueQuestion": "hist-faturamento-m2",
+          "expensesQuestion": "hist-despesas-m2",
+          "withdrawalsQuestion": "hist-retiradas-m2"
+        },
+        {
+          "monthKey": "m1",
+          "label": "Mês anterior",
+          "revenueQuestion": "hist-faturamento-m1",
+          "expensesQuestion": "hist-despesas-m1",
+          "withdrawalsQuestion": "hist-retiradas-m1"
+        }
       ]
     },
-    "packages": [
-      {
-        "id": "essencial",
-        "label": "Linha Essencial · Acabamento clássico e uniforme",
-        "overrides": {
-          "acabamento": "discreto"
+    "recommendations": [],
+    "growth": {
+      "goalQuestion": "objetivo-vida",
+      "horizonQuestion": "horizonte-meta",
+      "constraintQuestion": "obstaculo-meta",
+      "desiredHoursQuestion": "horas-desejadas",
+      "clientNeedQuestion": "publico-necessidade",
+      "clientBarrierQuestion": "publico-obstaculo",
+      "clientReturnQuestion": "publico-retorno",
+      "strategies": [
+        {
+          "option": "renda",
+          "title": "Mais renda com uma rotina sustentável",
+          "action": "Revise a contribuição dos serviços e teste uma mudança por vez. Só aumente atendimentos quando houver capacidade e procura observada.",
+          "indicator": "Resultado operacional e retirada mensal, junto das horas trabalhadas."
+        },
+        {
+          "option": "tempo",
+          "title": "Seu trabalho a favor do seu tempo",
+          "action": "Proteja blocos de descanso e compare a contribuição por hora dos serviços. Teste uma agenda menor antes de aceitar novas clientes; acompanhe o efeito na renda.",
+          "indicator": "Horas totais por semana e retirada mensal preservada."
+        },
+        {
+          "option": "espaco",
+          "title": "Preparar seu espaço com segurança",
+          "action": "Levante o investimento inicial e os custos mensais do espaço. Compare-os com a geração atual e a demanda observada antes de contratar aluguel ou financiamento.",
+          "indicator": "Orçamento do espaço, reserva disponível e demanda confirmada."
+        },
+        {
+          "option": "especializar",
+          "title": "Especialização alinhada às suas clientes",
+          "action": "Escolha uma técnica de seu interesse que tenha procura observada. Planeje prática e compare custos de formação antes de comprar um curso.",
+          "indicator": "Pedidos pela técnica, tempo de prática e custo que cabe no orçamento."
+        },
+        {
+          "option": "organizar",
+          "title": "Uma rotina organizada para avançar",
+          "action": "Separe um momento semanal para registrar entradas, saídas e agenda. Escolha uma dificuldade por vez, respeitando seu tempo pessoal.",
+          "indicator": "Registros semanais completos e horas de trabalho dentro do limite escolhido."
         }
-      },
-      {
-        "id": "expressivo",
-        "label": "Linha Premium · Nail art de alto destaque",
-        "overrides": {
-          "acabamento": "elaborado"
+      ],
+      "audienceStrategies": [
+        {
+          "option": "praticidade",
+          "action": "Teste uma melhoria de horários ou agendamento com as clientes atuais e observe a adesão sem ampliar automaticamente sua jornada."
+        },
+        {
+          "option": "durabilidade",
+          "action": "Peça feedback sobre a experiência e explique seus cuidados e processo, sem prometer durabilidade não comprovada."
+        },
+        {
+          "option": "arte",
+          "action": "Mostre exemplos reais do seu portfólio e registre quais trabalhos geram pedidos antes de investir em novos materiais."
+        },
+        {
+          "option": "preco",
+          "action": "Explique o que está incluído e compare opções sustentáveis. Evite descontos abaixo dos custos para tentar fechar a venda."
+        },
+        {
+          "option": "nao-sei",
+          "action": "Pergunte a algumas clientes por que escolheram você e o que poderia melhorar. Registre os motivos antes de investir em anúncios ou cursos."
         }
-      }
-    ]
+      ]
+    }
   },
   "presentation": {
     "preview": {
-      "title": "Sua prévia de atendimento",
+      "title": "Sua prévia de diagnóstico do negócio",
       "blocks": [
+        "growth-plan",
         "profile",
-        "pricing-diagnosis",
-        "time-audit",
-        "hourly-rate",
-        "scenarios",
-        "hidden-costs"
+        "business-summary",
+        "capacity-diagnosis",
+        "contribution-ranking",
+        "priority-actions",
+        "limitations-notice"
       ]
     },
     "report": {
-      "template": "pricing-report-v1",
-      "title": "Relatório Técnico e Comercial",
+      "template": "business-report-v1",
+      "title": "Seu Plano de Evolução Profissional e Financeira",
       "blocks": [
+        "growth-plan",
         "profile",
         "executive-summary",
-        "pricing-diagnosis",
-        "cost-breakdown",
-        "margin-scenarios",
-        "packages",
-        "menu-recommendation",
-        "whatsapp-script"
+        "dre-overview",
+        "monthly-history",
+        "service-pricing-analysis",
+        "capacity-audit",
+        "personal-finance",
+        "reserves-and-debt",
+        "action-plan",
+        "sensitivity-scenarios",
+        "recommendations"
       ]
     }
   },
   "offer": {
     "mode": "demo",
     "currency": "BRL",
-    "priceCents": null
+    "priceCents": 1990
   },
   "evidence": {
     "sources": [
       {
-        "title": "Metodologia de Formação de Preço para Serviços",
+        "title": "Metodologia de Formação de Preço para Serviços — Sebrae",
         "url": "https://conhecimento.sebraers.com.br/wp-content/uploads/2023/08/E-Book-Como-formar-preco-de-servicos-12857.pdf",
-        "accessedOn": "2026-11-02",
-        "scope": "Diretrizes de rateio de despesas operacionais fixas por hora produtiva e margem sobre faturamento"
+        "accessedOn": "2026-11-04",
+        "scope": "Diretrizes de rateio de despesas operacionais fixas por hora líquida produtiva, custos variáveis de insumos e markup divisor sobre faturamento"
+      },
+      {
+        "title": "Lei Geral de Proteção de Dados (LGPD) — Lei nº 13.709/2018",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html",
+        "accessedOn": "2026-11-04",
+        "scope": "Conformidade com princípios de finalidade, adequação e minimização: processamento puramente local em memória, sem rastreamento ou persistência não autorizada"
+      },
+      {
+        "title": "Código de Defesa do Consumidor (CDC) — Lei nº 8.078/1990",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/1990/lei-8078-11-setembro-1990-365086-normaatualizada-pl.html",
+        "accessedOn": "2026-11-04",
+        "scope": "Transparência nas informações, identificação de ofertas demonstrativas e divulgação ostensiva de vínculos de afiliação ou potenciais comissões"
       }
     ],
     "limitations": [
-      "Valores de materiais e insumos descartáveis utilizam médias técnicas de mercado; custos individuais variam conforme marca, rendimento e localidade.",
-      "As margens e remunerações sugeridas são parâmetros de referência e não representam garantia de lucro pessoal."
+      "Todos os números de faturamento, preços, custos de materiais e despesas fixas são autodeclarados e não representam auditoria contábil oficial.",
+      "O cálculo do preço sugerido utiliza a metodologia Sebrae de rateio por hora e markup divisor; a aceitação comercial dos preços depende do mercado local e da percepção de valor pelas clientes.",
+      "Os resultados constituem estimativas pedagógicas de apoio à gestão e não asseguram lucro, rendimento ou estabilidade futura.",
+      "Objetivos e preferências das clientes são declarados pela profissional. O horizonte desejado não é uma previsão nem garantia de transformação."
     ]
   }
 }

@@ -1,0 +1,23 @@
+import {test,expect} from '@playwright/test';
+import {completePilot,goBackTo} from './helpers';
+test('objetivos mudam a direção, público aparece e compartilhamento não inclui finanças',async({page})=>{
+ await completePilot(page);
+ await page.getByRole('button',{name:'Editar respostas'}).click();
+ await goBackTo(page,1);
+ await page.locator('#opcao-objetivo-vida-tempo').check();
+ await page.locator('#campo-horas-desejadas').fill('10');
+ for(let i=1;i<7;i++)await page.getByRole('button',{name:'Continuar'}).click();
+ await page.locator('#opcao-publico-necessidade-nao-sei').check();
+ await page.locator('#opcao-publico-obstaculo-horario').check();
+ await page.getByRole('button',{name:'Continuar'}).click();
+ await page.getByRole('button',{name:'Continuar'}).click();
+ await page.getByRole('button',{name:'Ver prévia'}).click();
+ await expect(page.getByTestId('plano-evolucao')).toContainText('Seu trabalho a favor do seu tempo');
+ await page.getByText('Compartilhar apenas meu objetivo',{exact:true}).click();
+ await expect(page.getByLabel('Texto para compartilhar')).not.toHaveValue(/1\.500|2000|Pessoa Teste|@/);
+ await page.getByRole('button',{name:'Ver relatório completo'}).click();
+ await expect(page.getByTestId('plano-evolucao')).toContainText('Pergunte');
+ await expect(page.locator('.action-plan')).toContainText('Proteja blocos de descanso');
+ await page.setViewportSize({width:360,height:740});
+ await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
